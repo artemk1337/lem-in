@@ -27,6 +27,7 @@ t_lemin	*init_lemin(void)
 	lemin->finish = NULL;
 	lemin->rooms = 0;
 	lemin->solution = NULL;
+	lemin->prev_solution = NULL;
 	lemin->edge = 0;
 	return (lemin);
 }

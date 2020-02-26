@@ -46,6 +46,7 @@ typedef struct			s_tmp
 typedef struct			s_solution
 {
 	t_room				**arr;
+	int 				path_len;
 	struct s_solution	*next;
 }						t_solution;
 
@@ -114,5 +115,11 @@ void					error_exit(void);
 ** global VARS
 */
 t_lemin					*g_lemin;
+
+/*
+** Solution copy and destroy
+*/
+t_solution				*copy_solution(t_solution *source_solutions);
+void					destroy_solutions(t_solution **solution);
 
 #endif

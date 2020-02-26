@@ -58,6 +58,7 @@ void	    	init_sol(t_solution *sol, int size)
 	if (!(tmp_s->arr = malloc(sizeof(t_room *) * (size + 1))))
 		exit(1);
 	tmp_s->arr[size] = NULL;
+	sol->path_len = size;
 	init_sol_dop(tmp_s, size, sol);
 }
 
