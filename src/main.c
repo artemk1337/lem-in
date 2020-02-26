@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:04:40 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/26 16:13:25 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/02/26 16:42:48 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,6 @@ void	algorithm(t_tmp *list)
 		reset_struct(list);
 		// ft_putstr("\n\n\n");
 	}
-	ft_putstr("TEST\n\n");
 }
 
 
