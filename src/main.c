@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "lemin.h"
-#define DEBUG
+//#define DEBUG
 #ifndef DEBUG
 # define STDIN 0
 #endif
