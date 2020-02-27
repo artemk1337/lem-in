@@ -40,7 +40,6 @@ t_room	*init_room(char *s)
 		exit(1);
 	room->name = ft_strdup(s);
 	room->next = NULL;
-	room->curr_w = 0;
 	room->prev = NULL;
 	room->path = NULL;
 	room->min_w = INT_MAX / 2;

@@ -31,7 +31,6 @@ typedef struct			s_room
 	t_next				*next;
 
 	int					min_w;
-	int					curr_w;
 	struct s_room		*prev;
 
 	struct s_room		**path;

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "lemin.h"
-//#define DEBUG
+#define DEBUG
 #ifndef DEBUG
 # define STDIN 0
 #endif
@@ -253,10 +253,11 @@ void	algorithm(t_tmp *list)
 		if (!save_tmp())
 			break ;
 		test_way();
+
+//		if (g_lemin->prev_solution)
+//			destroy_solutions(&(g_lemin->prev_solution));
+//		g_lemin->prev_solution = copy_solution(g_lemin->solution);
 		reset_struct(list);
-		if (g_lemin->prev_solution)
-			destroy_solutions(&(g_lemin->prev_solution));
-		g_lemin->prev_solution = copy_solution(g_lemin->solution);
 		// ft_putstr("\n\n\n");
 	}
 }
@@ -273,7 +274,7 @@ void	algorithm(t_tmp *list)
 int		main()
 {
 #ifdef DEBUG
-	g_fd = open("../test", O_RDONLY);
+	g_fd = open("../test_2", O_RDONLY);
 #endif
 	t_tmp	*tmp;
 

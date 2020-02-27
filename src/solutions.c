@@ -41,7 +41,7 @@ void	    	init_sol(t_solution *sol, int size)
 
 	if (!(sol))
 	{
-		if (!(sol = malloc(sizeof(t_solution))))
+		if (!(sol = ft_memalloc(sizeof(t_solution))))
 			exit(1);
 		tmp_s = sol;
 	}
@@ -50,15 +50,15 @@ void	    	init_sol(t_solution *sol, int size)
 		tmp_s = sol;
 		while (tmp_s->next)
 			tmp_s = tmp_s->next;
-		if (!(tmp_s->next = malloc(sizeof(t_solution))))
+		if (!(tmp_s->next = ft_memalloc(sizeof(t_solution))))
 			exit(1);
 		tmp_s = tmp_s->next;
 	}
-	tmp_s->next = NULL;
+//	tmp_s->next = NULL;
 	if (!(tmp_s->arr = malloc(sizeof(t_room *) * (size + 1))))
 		exit(1);
 	tmp_s->arr[size] = NULL;
-	sol->path_len = size;
+	tmp_s->path_len = size;
 	init_sol_dop(tmp_s, size, sol);
 }
 
@@ -87,7 +87,6 @@ int                 save_tmp()
 		neigh_tmp->weight = -1;
 		room = room->prev;
 	}
-	room = g_lemin->finish;
 	init_sol(g_lemin->solution, tmp_rooms);
     return (1);
 }
