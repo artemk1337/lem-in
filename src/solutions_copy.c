@@ -27,7 +27,8 @@ t_solution *copy_solution(t_solution *source_solutions)
 				(source_solutions->path_len + 1));
 		solution_iter->path_len = source_solutions->path_len;
 		while (++room_iterator < source_solutions->path_len)
-			solution_iter->arr[room_iterator] = source_solutions->arr[room_iterator];
+			solution_iter->arr[room_iterator] =
+					source_solutions->arr[room_iterator];
 		solution_iter->arr[room_iterator] = NULL;
 		solution_iter->next = source_solutions->next ?
 				ft_memalloc(sizeof(*new_solution)): NULL;
