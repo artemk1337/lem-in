@@ -1,0 +1,9 @@
+10
+##start
+Start room 4 5
+Middle room 10 5
+##end
+End room 1 2
+Start room-Middle room
+Middle room-End room
+Start room-End room

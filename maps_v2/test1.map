@@ -1,0 +1,25 @@
+10
+Ann is a monkey 23 3
+##start
+Banana 16 4
+#comment
+Cat 16 3
+Dog 16 5
+Egg 9 3
+##end
+Frog 1 5
+Golf 4 8
+Hello 9 5
+Hello-Dog
+Hello-Frog
+Ann is a monkey-Cat
+Dog-Cat
+Egg-Banana
+Cat-Egg
+#another comment
+Dog-Banana
+Banana-Ann is a monkey
+Golf-Frog
+Golf-Banana
+Golf-Dog
+Frog-Egg

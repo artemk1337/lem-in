@@ -6,12 +6,12 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:04:40 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/26 16:42:48 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/02/27 14:19:03 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
-#define DEBUG
+//#define DEBUG
 #ifndef DEBUG
 # define STDIN 0
 #endif
@@ -254,9 +254,9 @@ void	algorithm(t_tmp *list)
 			break ;
 		test_way();
 
-//		if (g_lemin->prev_solution)
-//			destroy_solutions(&(g_lemin->prev_solution));
-//		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		if (g_lemin->prev_solution)
+			destroy_solutions(&(g_lemin->prev_solution));
+		g_lemin->prev_solution = copy_solution(g_lemin->solution);
 		reset_struct(list);
 		// ft_putstr("\n\n\n");
 	}
