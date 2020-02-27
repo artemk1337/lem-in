@@ -18,12 +18,13 @@ t_solution *copy_solution(t_solution *source_solutions)
 	int			room_iterator;
 	t_solution	*new_solution;
 
-	new_solution = malloc(sizeof(t_solution));
+	new_solution = ft_memalloc(sizeof(t_solution));
 	solution_iter = new_solution;
 	while (source_solutions)
 	{
 		room_iterator = -1;
 		solution_iter->arr = malloc(sizeof(t_room *) * (source_solutions->path_len + 1));
+
 		solution_iter->path_len = source_solutions->path_len;
 		while (++room_iterator < source_solutions->path_len)
 			solution_iter->arr[room_iterator] = source_solutions->arr[room_iterator];
