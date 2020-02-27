@@ -120,5 +120,7 @@ t_lemin					*g_lemin;
 */
 t_solution				*copy_solution(t_solution *source_solutions);
 void					destroy_solutions(t_solution **solution);
+int						check_solutions(t_solution *prev_solution,
+										t_solution *current_solution);
 
 #endif

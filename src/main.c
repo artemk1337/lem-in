@@ -252,8 +252,13 @@ void	algorithm(t_tmp *list)
 			break ;
 		if (!save_tmp())
 			break ;
+		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+		{
+			destroy_solutions(&g_lemin->solution);
+			g_lemin->solution = g_lemin->prev_solution;
+			return ;
+		}
 		test_way();
-
 		if (g_lemin->prev_solution)
 			destroy_solutions(&(g_lemin->prev_solution));
 		g_lemin->prev_solution = copy_solution(g_lemin->solution);

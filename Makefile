@@ -12,9 +12,9 @@
 
 NAME = lem-in
 
-SRCS_NAME = main.c init.c hash.c error_handler.c validation.c _check.c clear.c solutions.c solutions_copy.c
-
-
+SRCS_NAME = \
+            main.c init.c hash.c error_handler.c validation.c _check.c clear.c solutions.c solutions_copy.c\
+            check_solutions.c
 
 ### PATH ###
 SRCS_PATH = src/
