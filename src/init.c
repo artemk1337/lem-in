@@ -43,6 +43,7 @@ t_room	*init_room(char *s)
 	room->prev = NULL;
 	room->path = NULL;
 	room->min_w = INT_MAX / 2;
+	room->superpos = 0;
 	return (room);
 }
 

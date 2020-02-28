@@ -205,6 +205,12 @@ void	show_max_lines()
 
 
 
+
+
+
+
+
+
 static void	put_min_weights(t_tmp *start)
 {
 	t_tmp	*curr;
@@ -233,6 +239,31 @@ static void	put_min_weights(t_tmp *start)
 	}
 }
 
+
+
+//void	clean_one_sol(t_solution *sol, t_room *curr_r);
+
+
+int		check_superpos(t_solution *sol)
+{
+	t_room	*curr_r;
+	t_next	*neigh;
+
+	sol += 0;
+	curr_r = g_lemin->start;
+	while (curr_r->path == NULL)
+	{
+		neigh = curr_r->next;
+		while (neigh && neigh->room->prev != curr_r)
+			neigh = neigh->next;
+		curr_r = neigh->room;
+	}
+	//clean_prev(curr_r);
+	//clean_one_sol(sol, curr_r);
+	return (1);
+}
+
+
 void	algorithm(t_tmp *list)
 {
 	int i;
@@ -242,31 +273,31 @@ void	algorithm(t_tmp *list)
 		i = 0;
 		while (i++ < g_lemin->edge)
 		{
-			//check_struct(list);
 			put_min_weights(list);
-			//ft_putstr("\n\n\n");
 		}
-		//ft_putstr("TEST\n\n");
-		//check_struct(list);
 		if (!(g_lemin->finish->prev))
+		{
+			//if (check_superpos(g_lemin->solution))
+			//	break ;
 			break ;
+		}
+		ft_putnbr(123);
 		if (!save_tmp())
 			break ;
-		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
-		{
-			destroy_solutions(&g_lemin->solution);
-			g_lemin->solution = g_lemin->prev_solution;
-			return ;
-		}
 		test_way();
-		if (g_lemin->prev_solution)
-			destroy_solutions(&(g_lemin->prev_solution));
-		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		// if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+		// {
+		// 	destroy_solutions(&g_lemin->solution);
+		// 	g_lemin->solution = g_lemin->prev_solution;
+		// 	return ;
+		// }
+		// if (g_lemin->prev_solution)
+		// 	destroy_solutions(&(g_lemin->prev_solution));
+		// g_lemin->prev_solution = copy_solution(g_lemin->solution);
 		reset_struct(list);
-		// ft_putstr("\n\n\n");
 	}
 }
-
+	
 
 
 
