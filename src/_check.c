@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 16:22:57 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/26 16:07:28 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/02/28 19:44:38 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ void	check_struct(t_tmp *tmp)
 		ft_putstr("\t| ");
 		ft_putstr("prev ");
 		ft_putstr((tmp->room->prev) ? tmp->room->prev->name : "NULL");
+		ft_putstr("\t| ");
+		ft_putstr("pos ");
+		ft_putnbr(tmp->room->superpos);
 		neigh = tmp->room->next;
 		while (neigh)
 		{

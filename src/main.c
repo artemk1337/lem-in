@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:04:40 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/27 14:19:03 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/02/28 20:03:30 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ void	show_max_lines()
 
 
 
-static void	put_min_weights(t_tmp *start)
+static int	put_min_weights(t_tmp *start, int counter)
 {
 	t_tmp	*curr;
 	t_room	*prev_r;
@@ -228,8 +228,11 @@ static void	put_min_weights(t_tmp *start)
 			prev_n = prev_r->next;
 			while (prev_n && prev_n->room != curr->room)
 				prev_n = prev_n->next;
-			if (prev_n->toggle && prev_r->min_w + prev_n->weight < curr->room->min_w)
+			if (prev_n->toggle && prev_r->min_w + prev_n->weight < curr->room->min_w
+			&& prev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL) /*
+			**addprev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL */
 			{
+				counter++;
 				curr->room->min_w = prev_r->min_w + prev_n->weight;
 				curr->room->prev = prev_r;
 			}
@@ -237,32 +240,192 @@ static void	put_min_weights(t_tmp *start)
 		}
 		curr = curr->next;
 	}
+	return (counter);
 }
 
 
 
-//void	clean_one_sol(t_solution *sol, t_room *curr_r);
 
 
-int		check_superpos(t_solution *sol)
+static int	check_neigh(t_room **arr, int i)
 {
-	t_room	*curr_r;
 	t_next	*neigh;
+	int		k;
 
-	sol += 0;
-	curr_r = g_lemin->start;
-	while (curr_r->path == NULL)
+	k = 0;
+	neigh = arr[i]->next;
+	while (neigh)
 	{
-		neigh = curr_r->next;
-		while (neigh && neigh->room->prev != curr_r)
-			neigh = neigh->next;
-		curr_r = neigh->room;
+		k++;
+		neigh = neigh->next;
 	}
-	//clean_prev(curr_r);
-	//clean_one_sol(sol, curr_r);
+	if (k > 2)
+		return (0);
+	arr[i]->superpos = 1;
 	return (1);
 }
 
+void		clean_one_sol(t_solution *sol, t_room *curr_r)
+{
+	t_solution	*curr_s;
+	t_solution	*prev_s;
+	int			i;
+
+	prev_s = NULL;
+	curr_s = sol;
+	while (curr_s)
+	{
+		if (curr_s->arr == curr_r->path)
+		{
+			i = 0;
+			while (curr_s->arr[i])
+			{
+				curr_s->arr[i++]->path = NULL;
+				if (curr_s->arr[i])
+					curr_s->arr[i]->prev = curr_s->arr[i - 1];
+			}
+			i = 0;
+			while (curr_s->arr[i] && curr_s->arr[i] != curr_r)
+				i++;
+			i--;
+			while (i >= 0 && check_neigh(curr_s->arr, i))
+				curr_s->arr[i--] = NULL;
+			free(curr_s->arr);
+			if (prev_s)
+				prev_s->next = curr_s->next;
+			else
+				g_lemin->solution = curr_s->next;
+			free(curr_s);
+			break ;
+		}
+		prev_s = curr_s;
+		curr_s = curr_s->next;
+	}
+}
+
+int		check_superpos(t_solution *sol, int count)
+{
+	t_room	*curr_r;
+	t_room	*prev_r;
+	t_next	*neigh;
+	t_next	*tmp_n;
+
+	prev_r = NULL;
+	curr_r = g_lemin->start;
+	while (curr_r)
+	{
+		// ft_putstr(curr_r->name);
+		// ft_putstr("\n");
+		neigh = curr_r->next;
+		while (neigh && neigh->room->prev != curr_r)
+			neigh = neigh->next;
+		if (neigh && neigh->room->prev == curr_r)
+		{
+			prev_r = neigh->room->prev;
+		}
+		if (!neigh)
+		{
+			tmp_n = curr_r->next;
+			while (tmp_n)
+			{
+				if (!(tmp_n->room->superpos) && tmp_n->room->path)
+				{
+					prev_r = curr_r;
+					curr_r = tmp_n->room;
+					break ;
+				}
+				tmp_n = tmp_n->next;
+			}
+			break ;
+		}
+		curr_r = neigh->room;
+	}
+	if (!curr_r || !(curr_r->path) || curr_r == prev_r)
+	{
+		// ft_putstr("EXIT\n");
+		if (!count)
+			return (1);
+		return (0);
+	}
+	// ft_putstr(curr_r->name);
+	// ft_putstr("\n");
+
+	clean_one_sol(sol, curr_r);
+	curr_r->prev = prev_r;
+	// ft_putstr(prev_r->name);
+	// ft_putstr("\n");
+	if (!save_tmp())
+		exit (1);
+	curr_r = g_lemin->finish->prev;
+	while (curr_r != g_lemin->start)
+	{
+		curr_r->superpos = 1;
+		curr_r = curr_r->prev;
+	}
+	// test_way();
+	if (!check_superpos(sol, count + 1))
+		return (0);
+	return (1);
+}
+
+void	reset_superpos(t_tmp *list)
+{
+	t_tmp	*tmp;
+	t_next	*curr_n;
+
+	reset_struct(list);
+	tmp = list;
+	while (tmp)
+	{
+		// ft_putstr(tmp->room->name);
+		// ft_putstr("\n");
+		if (tmp->room->superpos == 0)
+		{
+			curr_n = tmp->room->next;
+			while (curr_n)
+			{
+				if (curr_n->room->superpos == 0)
+					curr_n->toggle = 1;
+				curr_n = curr_n->next;
+			}
+		}
+		tmp = tmp->next;
+	}
+}
+
+void	algorithm_super_pos(t_tmp *list)
+{
+	int i;
+
+	while (1)
+	{
+		i = 0;
+		while (i++ < g_lemin->edge)
+		{
+			if (!put_min_weights(list, 0))
+				break ;
+		}
+		if (!(g_lemin->finish->prev))
+		{
+			break ;
+		}
+		if (!save_tmp())
+			break ;
+		/// Часть Макса
+		// test_way();
+		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+		{
+			destroy_solutions(&g_lemin->solution);
+			g_lemin->solution = g_lemin->prev_solution;
+			return ;
+		}
+		if (g_lemin->prev_solution)
+			destroy_solutions(&(g_lemin->prev_solution));
+		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		///
+		reset_struct(list);
+	}
+}
 
 void	algorithm(t_tmp *list)
 {
@@ -273,27 +436,39 @@ void	algorithm(t_tmp *list)
 		i = 0;
 		while (i++ < g_lemin->edge)
 		{
-			put_min_weights(list);
+			if (!put_min_weights(list, 0))
+				break ;
 		}
 		if (!(g_lemin->finish->prev))
 		{
-			//if (check_superpos(g_lemin->solution))
-			//	break ;
-			break ;
+			//check_struct(list);
+			if (check_superpos(g_lemin->solution, 0))
+			{
+				// check_struct(list);
+				break ;
+			}
+			else
+			{
+				// check_struct(list);
+				reset_superpos(list);
+				algorithm_super_pos(list);
+				break ;
+			}
 		}
-		ft_putnbr(123);
 		if (!save_tmp())
 			break ;
-		test_way();
-		// if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
-		// {
-		// 	destroy_solutions(&g_lemin->solution);
-		// 	g_lemin->solution = g_lemin->prev_solution;
-		// 	return ;
-		// }
-		// if (g_lemin->prev_solution)
-		// 	destroy_solutions(&(g_lemin->prev_solution));
-		// g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		/// Часть Макса
+		// test_way();
+		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+		{
+			destroy_solutions(&g_lemin->solution);
+			g_lemin->solution = g_lemin->prev_solution;
+			return ;
+		}
+		if (g_lemin->prev_solution)
+			destroy_solutions(&(g_lemin->prev_solution));
+		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		///
 		reset_struct(list);
 	}
 }
@@ -319,6 +494,7 @@ int		main()
 	g_lemin->arr = create_array(&tmp);
 	check_duplicate_nodes(g_lemin->arr);
 	algorithm(tmp);
+	print_sol();
 	//check_struct(tmp);
 
 	// if (!(g_lemin->solution))
