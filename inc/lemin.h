@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:05:08 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/26 16:29:52 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/02/29 13:29:30 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ typedef struct			s_room
 	struct s_room		*prev;
 
 	struct s_room		**path;
+
+	// For ant
+	unsigned long		ant;
+	unsigned long		number_anc;
 }						t_room;
 
 typedef struct			s_tmp
@@ -110,6 +114,11 @@ unsigned long int		check_ant_num(char *str);
 ** Error handling
 */
 void					error_exit(void);
+
+/*
+** output.c
+*/
+void					alg_4(void);
 
 /*
 ** global VARS

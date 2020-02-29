@@ -6,15 +6,24 @@
 #    By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/05 18:26:35 by cchadwic          #+#    #+#              #
-#    Updated: 2020/02/26 15:54:04 by cchadwic         ###   ########.fr        #
+#    Updated: 2020/02/29 13:28:45 by cchadwic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = lem-in
 
-SRCS_NAME = \
-            main.c init.c hash.c error_handler.c validation.c _check.c clear.c solutions.c solutions_copy.c\
-            check_solutions.c
+SRCS_NAME = main.c\
+			init.c\
+			hash.c\
+			error_handler.c\
+			validation.c\
+			_check.c\
+			clear.c\
+			solutions.c\
+			solutions_copy.c\
+            check_solutions.c\
+			output.c\
+			
 
 ### PATH ###
 SRCS_PATH = src/
