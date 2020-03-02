@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:05:08 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/29 13:29:30 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:43:15 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void					test_way(void);
 /*
 ** solution.c
 */
-int						save_tmp();
+int						save_tmp(void);
 void					reset_struct(t_tmp *list);
 void	    			init_sol(t_solution *sol, int size);
 
