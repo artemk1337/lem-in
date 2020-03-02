@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:04:40 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/29 13:30:35 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:32:02 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -497,9 +497,9 @@ int		main()
 	print_sol();
 	if (!(g_lemin->solution))
 		error_exit();
-	show_input();
-	alg_4();
+	//show_input();
+	//alg_4();
 	//check_struct(tmp);
-	show_max_lines();
+	//show_max_lines();
 	return (0);
 }
