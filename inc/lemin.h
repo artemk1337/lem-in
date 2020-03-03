@@ -50,7 +50,7 @@ typedef struct			s_tmp
 typedef struct			s_solution
 {
 	t_room				**arr;
-	int 				path_len;
+	unsigned int		path_len;
 	struct s_solution	*next;
 }						t_solution;
 

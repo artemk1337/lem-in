@@ -25,7 +25,6 @@ struct s_bandwidth	*count_solution_bandwidth(t_solution *solution)
 {
 	int					prev_path_len;
 	struct s_bandwidth *bandwidth;
-	int 	*paths_len;
 
 	bandwidth = ft_memalloc(sizeof(*bandwidth));
 	bandwidth->bandwidth = 1;

@@ -10,20 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lemin.h"
-
-void sort_solutions(t_solution **solution)
-{
-	t_solution *begin;
-	t_solution *temp;
-	t_solution *iter;
-
-	if (*solution || !(*solution)->next)
-		return ;
-//	begin = *solution;
-	begin = (*solution)->next
-	while (begin->next)
-		temp = begin->next;
-		while (temp->path_len < begin->path_len)
-			temp
-}
+//#include "lemin.h"
+//
+//void sort_solutions(t_solution **solution)
+//{
+//	t_solution *begin;
+//	t_solution *temp;
+//	t_solution *iter;
+//
+//	if (*solution || !(*solution)->next)
+//		return ;
+////	begin = *solution;
+//	begin = (*solution)->next
+//	while (begin->next)
+//		temp = begin->next;
+//		while (temp->path_len < begin->path_len)
+//			temp
+//}

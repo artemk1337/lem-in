@@ -14,9 +14,9 @@
 
 t_solution *copy_solution(t_solution *source_solutions)
 {
-	t_solution	*solution_iter;
-	int			room_iterator;
-	t_solution	*new_solution;
+	t_solution		*solution_iter;
+	unsigned int	room_iterator;
+	t_solution		*new_solution;
 
 	new_solution = ft_memalloc(sizeof(t_solution));
 	solution_iter = new_solution;
