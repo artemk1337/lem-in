@@ -15,8 +15,9 @@
 struct s_bandwidth
 {
 	unsigned int	path_num;
-	unsigned int max_len;
-	unsigned int bandwidth; // max bandwidth for max_len moves
+	unsigned int	max_len;
+	unsigned int	bandwidth; // max bandwidth for max_len moves
+	t_solution		*solution;
 };
 
 
@@ -24,17 +25,20 @@ struct s_bandwidth	*count_solution_bandwidth(t_solution *solution)
 {
 	int					prev_path_len;
 	struct s_bandwidth *bandwidth;
+	int 	*paths_len;
 
 	bandwidth = ft_memalloc(sizeof(*bandwidth));
-	bandwidth->bandwidth = solution->path_len;
+	bandwidth->bandwidth = 1;
 	prev_path_len = 0;
 	while (solution)
 	{
 		if (bandwidth->path_num)
-			bandwidth->bandwidth += bandwidth->path_num * (solution->path_len - prev_path_len);
+			bandwidth->bandwidth += bandwidth->path_num * (solution->path_len -
+					prev_path_len) + 1;
 		prev_path_len = solution->path_len;
 		bandwidth->path_num++;
-		bandwidth->max_len = solution->path_len;
+		bandwidth->max_len = solution->path_len > bandwidth->max_len ?
+				solution->path_len : bandwidth->max_len;
 		solution = solution->next;
 	}
 	return (bandwidth);
@@ -56,7 +60,7 @@ int		check_solutions(t_solution *prev_solution, t_solution *current_solution)
 
 	if (!prev_solution)
 		return (0);
-	if ((prev_bandwidth = count_solution_bandwidth(prev_solution))->bandwidth >
+	if ((prev_bandwidth = count_solution_bandwidth(prev_solution))->bandwidth >=
 		g_lemin->count)
 		return (1);
 	curr_bandwidth = count_solution_bandwidth(current_solution);
