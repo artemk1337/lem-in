@@ -6,22 +6,49 @@
 #    By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/05 18:26:35 by cchadwic          #+#    #+#              #
-#    Updated: 2020/02/26 15:54:04 by cchadwic         ###   ########.fr        #
+#    Updated: 2020/03/02 15:51:56 by cchadwic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = lem-in
 
-SRCS_NAME = \
-            main.c init.c hash.c error_handler.c validation.c _check.c clear.c solutions.c solutions_copy.c\
-            check_solutions.c
+SRCS_NAME = main.c\
+			init.c\
+			hash.c\
+			error_handler.c\
+			validation.c\
+			_check.c\
+			clear.c\
+			solutions.c\
+			solutions_copy.c\
+            check_solutions.c\
+			output.c\
+			
 
 ### PATH ###
 SRCS_PATH = src/
 OBJ_PATH  = obj/
 LIBFT_PATH = libft/
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall \
+		-Werror \
+		-Wextra \
+		-ftrapv \
+		-Wfloat-equal \
+		-Wundef \
+		-Wshadow \
+		-Wpointer-arith \
+		-Wcast-qual \
+		-Wno-missing-braces \
+		-Wcast-align \
+		-Wstrict-prototypes \
+		-Wunreachable-code \
+		-D_FORTIFY_SOURCE=2 \
+		-fstack-protector-strong \
+		-Werror=format-security \
+		-Wformat=2 # Check printf \
+		# -finstrument-functions \
+		# -Wmissing-prototypes
 
 HEADERS = ./inc
 INC = -I $(HEADERS) -I ./$(LIBFT_PATH)includes/
@@ -54,3 +81,7 @@ fclean: clean
 re: fclean all
 
 .PHONY: all, clean, fclean, re
+
+
+# https://developers.redhat.com/blog/2018/03/21/compiler-and-linker-flags-gcc/
+# https://stackoverflow.com/questions/3375697/useful-gcc-flags-for-c

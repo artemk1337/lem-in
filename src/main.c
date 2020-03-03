@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:04:40 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/28 20:03:30 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:32:02 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -495,12 +495,11 @@ int		main()
 	check_duplicate_nodes(g_lemin->arr);
 	algorithm(tmp);
 	print_sol();
-	//check_struct(tmp);
-
-	// if (!(g_lemin->solution))
-	// 	error_exit();
+	if (!(g_lemin->solution))
+		error_exit();
 	//show_input();
-
+	//alg_4();
+	//check_struct(tmp);
 	//show_max_lines();
 	return (0);
 }

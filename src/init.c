@@ -6,7 +6,7 @@
 /*   By: cchadwic <cchadwic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 15:04:40 by cchadwic          #+#    #+#             */
-/*   Updated: 2020/02/26 15:33:41 by cchadwic         ###   ########.fr       */
+/*   Updated: 2020/02/29 13:24:52 by cchadwic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ t_room	*init_room(char *s)
 	room->path = NULL;
 	room->min_w = INT_MAX / 2;
 	room->superpos = 0;
+	room->ant = 0;
+	room->number_anc = 0;
 	return (room);
 }
 
