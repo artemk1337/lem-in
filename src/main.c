@@ -247,185 +247,40 @@ static int	put_min_weights(t_tmp *start, int counter)
 
 
 
-static int	check_neigh(t_room **arr, int i)
-{
-	t_next	*neigh;
-	int		k;
-
-	k = 0;
-	neigh = arr[i]->next;
-	while (neigh)
-	{
-		k++;
-		neigh = neigh->next;
-	}
-	if (k > 2)
-		return (0);
-	arr[i]->superpos = 1;
-	return (1);
-}
-
-void		clean_one_sol(t_solution *sol, t_room *curr_r)
-{
-	t_solution	*curr_s;
-	t_solution	*prev_s;
-	int			i;
-
-	prev_s = NULL;
-	curr_s = sol;
-	while (curr_s)
-	{
-		if (curr_s->arr == curr_r->path)
-		{
-			i = 0;
-			while (curr_s->arr[i])
-			{
-				curr_s->arr[i++]->path = NULL;
-				if (curr_s->arr[i])
-					curr_s->arr[i]->prev = curr_s->arr[i - 1];
-			}
-			i = 0;
-			while (curr_s->arr[i] && curr_s->arr[i] != curr_r)
-				i++;
-			i--;
-			while (i >= 0 && check_neigh(curr_s->arr, i))
-				curr_s->arr[i--] = NULL;
-			free(curr_s->arr);
-			if (prev_s)
-				prev_s->next = curr_s->next;
-			else
-				g_lemin->solution = curr_s->next;
-			free(curr_s);
-			break ;
-		}
-		prev_s = curr_s;
-		curr_s = curr_s->next;
-	}
-}
-
-int		check_superpos(t_solution *sol, int count)
+int		check_conflicts(void)
 {
 	t_room	*curr_r;
-	t_room	*prev_r;
-	t_next	*neigh;
-	t_next	*tmp_n;
-
-	prev_r = NULL;
-	curr_r = g_lemin->start;
-	while (curr_r)
-	{
-		// ft_putstr(curr_r->name);
-		// ft_putstr("\n");
-		neigh = curr_r->next;
-		while (neigh && neigh->room->prev != curr_r)
-			neigh = neigh->next;
-		if (neigh && neigh->room->prev == curr_r)
-		{
-			prev_r = neigh->room->prev;
-		}
-		if (!neigh)
-		{
-			tmp_n = curr_r->next;
-			while (tmp_n)
-			{
-				if (!(tmp_n->room->superpos) && tmp_n->room->path)
-				{
-					prev_r = curr_r;
-					curr_r = tmp_n->room;
-					break ;
-				}
-				tmp_n = tmp_n->next;
-			}
-			break ;
-		}
-		curr_r = neigh->room;
-	}
-	if (!curr_r || !(curr_r->path) || curr_r == prev_r)
-	{
-		// ft_putstr("EXIT\n");
-		if (!count)
-			return (1);
-		return (0);
-	}
-	// ft_putstr(curr_r->name);
-	// ft_putstr("\n");
-
-	clean_one_sol(sol, curr_r);
-	curr_r->prev = prev_r;
-	// ft_putstr(prev_r->name);
-	// ft_putstr("\n");
-	if (!save_tmp())
-		exit (1);
-	curr_r = g_lemin->finish->prev;
-	while (curr_r != g_lemin->start)
-	{
-		curr_r->superpos = 1;
-		curr_r = curr_r->prev;
-	}
-	// test_way();
-	if (!check_superpos(sol, count + 1))
-		return (0);
-	return (1);
-}
-
-void	reset_superpos(t_tmp *list)
-{
-	t_tmp	*tmp;
+	t_next	*start_n;
 	t_next	*curr_n;
+	int		i;
 
-	reset_struct(list);
-	tmp = list;
-	while (tmp)
+	start_n = g_lemin->start->next;
+	while (start_n)
 	{
-		// ft_putstr(tmp->room->name);
-		// ft_putstr("\n");
-		if (tmp->room->superpos == 0)
+		curr_n = start_n;
+		curr_r = g_lemin->start;
+		i = 0;
+		while (curr_n)
 		{
-			curr_n = tmp->room->next;
-			while (curr_n)
+			if (curr_n->room->prev == curr_r)
 			{
-				if (curr_n->room->superpos == 0)
-					curr_n->toggle = 1;
+				i = 0;
+				curr_r = curr_n->room;
+				curr_n = curr_r->next;
+			}
+			else
+			{
+				i++;
 				curr_n = curr_n->next;
 			}
 		}
-		tmp = tmp->next;
+		if (i > 2)
+			return (1);
+		start_n = start_n->next;
 	}
+	return (0);
 }
 
-void	algorithm_super_pos(t_tmp *list)
-{
-	int i;
-
-	while (1)
-	{
-		i = 0;
-		while (i++ < g_lemin->edge)
-		{
-			if (!put_min_weights(list, 0))
-				break ;
-		}
-		if (!(g_lemin->finish->prev))
-		{
-			break ;
-		}
-		if (!save_tmp())
-			break ;
-		/// Часть Макса
-		// test_way();
-		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
-		{
-			destroy_solutions(&g_lemin->solution);
-			g_lemin->solution = g_lemin->prev_solution;
-			return ;
-		}
-		if (g_lemin->prev_solution)
-			destroy_solutions(&(g_lemin->prev_solution));
-		g_lemin->prev_solution = copy_solution(g_lemin->solution);
-		///
-		reset_struct(list);
-	}
-}
 
 void	algorithm(t_tmp *list)
 {
@@ -442,18 +297,14 @@ void	algorithm(t_tmp *list)
 		if (!(g_lemin->finish->prev))
 		{
 			//check_struct(list);
-			if (check_superpos(g_lemin->solution, 0))
+			if (check_conflicts())
 			{
-				// check_struct(list);
+				// if is conflict
+				// need alg
 				break ;
 			}
 			else
-			{
-				// check_struct(list);
-				reset_superpos(list);
-				algorithm_super_pos(list);
 				break ;
-			}
 		}
 		if (!save_tmp())
 			break ;
