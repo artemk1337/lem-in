@@ -10,14 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "lemin.h"
-
-typedef struct			s_solution
-{
-//	t_room				**arr;
-	unsigned int		path_len;
-	struct s_solution	*next;
-}						t_solution;
+#include "lemin.h"
 
 void sort_solutions(t_solution **solution)
 {
@@ -33,37 +26,51 @@ void sort_solutions(t_solution **solution)
 	while (main_iter)
 	{
 		iter = begin;
-		while (iter->next != main_iter)
+		while (iter != main_iter)
 		{
-			if (iter->next->path_len > main_iter->path_len)
+			if (iter->path_len > main_iter->path_len)
 			{
-				temp[0] = iter->next;
-				iter->next = main_iter;
-				temp[1] = main_iter->next;
-				main_iter->next = temp[0];
+				if (iter == begin)
+				{
+					temp[1] = begin;
+					begin = main_iter;
+					temp[0]->next = main_iter->next;
+					main_iter->next = temp[1];
+				}
+				else
+				{
+					temp[0]->next = main_iter->next;
+					temp[1]->next = main_iter;
+					main_iter->next = iter;
+				}
+				break ;
 			}
+			temp[1] = iter;
 			iter = iter->next;
 		}
+		temp[0] = main_iter;
 		main_iter = main_iter->next;
 	}
+	*solution = begin;
 }
 
-#include <stdlib.h>
-
-int main()
-{
-	t_solution *ptr, *begin;
-
-	begin = ptr = malloc(sizeof(*ptr));
-	ptr->path_len = 8;
-	ptr->next = malloc(sizeof(*ptr));
-	ptr = ptr->next;
-	ptr->path_len = 8;
-	ptr->next = malloc(sizeof(*ptr));
-	ptr = ptr->next;
-	ptr->path_len = 6;
-	ptr->next = malloc(sizeof(*ptr));
-	ptr = ptr->next;
-	ptr->path_len = 7;
-	sort_solutions(&begin);
-}
+//#include <stdlib.h>
+//
+//int main()
+//{
+//	t_solution *ptr, *begin;
+//
+//	begin = ptr = malloc(sizeof(*ptr));
+//	ptr->path_len = 8;
+//	ptr->next = malloc(sizeof(*ptr));
+//	ptr = ptr->next;
+//	ptr->path_len = 8;
+//	ptr->next = malloc(sizeof(*ptr));
+//	ptr = ptr->next;
+//	ptr->path_len = 6;
+//	ptr->next = malloc(sizeof(*ptr));
+//	ptr = ptr->next;
+//	ptr->path_len = 7;
+//	ptr->next = 0;
+//	sort_solutions(&begin);
+//}
