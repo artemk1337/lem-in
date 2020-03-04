@@ -281,23 +281,20 @@ int		check_conflicts(void)
 	return (0);
 }
 
-t_solution	find_s(t_room **arr)
+t_solution	*find_s(t_room **arr)
 {
 	t_solution	*tmp;
 
+	tmp = g_lemin->solution;
 	while (tmp)
 		if (tmp->arr == arr)
 			return (tmp);
 	return (NULL);
 }
 
-void	fix_c(t_solution *s_1, t_solution *s_2, int i)
+void	fix_c_(t_solution *s_1, t_solution *s_2, int i)
 {
-	int		k;
-
-	k = 0;
-	while (s_2->arr[k] != s_1->arr[i])
-		k++;
+	return ;
 }
 
 void	fix_conflicts(void)
@@ -313,10 +310,19 @@ void	fix_conflicts(void)
 			i = 0;
 			while (tmp_s->arr[i])
 			{
-				if (tmp_s->arr[i]->path != tmp_s->arr)
+
+				//ft_putstr("TEST");
+				if (tmp_s->arr[i] != g_lemin->start
+					&& tmp_s->arr[i] != g_lemin->finish
+					&& tmp_s->arr[i]->path != tmp_s->arr)
+				{
+					ft_putstr("\nIN FIX\n\n");
 					fix_c_(tmp_s, find_s(tmp_s->arr[i]->path), i);
+				}
+				i++;
 			}
 		}
+		tmp_s = tmp_s->next;
 	}
 }
 
