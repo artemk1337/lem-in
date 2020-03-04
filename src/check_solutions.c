@@ -31,6 +31,11 @@ struct s_bandwidth	*count_solution_bandwidth(t_solution *solution)
 	prev_path_len = 0;
 	while (solution)
 	{
+		if (solution->hide)
+		{
+			solution = solution->next;
+			continue;
+		}
 		if (bandwidth->path_num)
 			bandwidth->bandwidth += bandwidth->path_num * (solution->path_len -
 					prev_path_len) + 1;
