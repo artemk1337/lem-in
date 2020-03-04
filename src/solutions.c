@@ -26,7 +26,7 @@ static void		init_sol_dop(t_solution *tmp_s, int size, t_solution *sol)
 	{
 		if (room->path)
 			hide = 1;
-        else if (room != g_lemin->finish)
+        if (room != g_lemin->finish)
             room->path = tmp_s->arr;
 		neigh = room->prev->next;
 		while (neigh->room != room)

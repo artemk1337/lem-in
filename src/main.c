@@ -281,6 +281,45 @@ int		check_conflicts(void)
 	return (0);
 }
 
+t_solution	find_s(t_room **arr)
+{
+	t_solution	*tmp;
+
+	while (tmp)
+		if (tmp->arr == arr)
+			return (tmp);
+	return (NULL);
+}
+
+void	fix_c(t_solution *s_1, t_solution *s_2, int i)
+{
+	int		k;
+
+	k = 0;
+	while (s_2->arr[k] != s_1->arr[i])
+		k++;
+}
+
+void	fix_conflicts(void)
+{
+	int			i;
+	t_solution	*tmp_s;
+
+	tmp_s = g_lemin->solution;
+	while (tmp_s)
+	{
+		if (tmp_s->hide)
+		{
+			i = 0;
+			while (tmp_s->arr[i])
+			{
+				if (tmp_s->arr[i]->path != tmp_s->arr)
+					fix_c_(tmp_s, find_s(tmp_s->arr[i]->path), i);
+			}
+		}
+	}
+}
+
 
 void	algorithm(t_tmp *list)
 {
@@ -299,8 +338,8 @@ void	algorithm(t_tmp *list)
 			//check_struct(list);
 			if (check_conflicts())
 			{
-				ft_putstr("There're conflicts\n");
-				// if is conflict
+				ft_putstr("There're conflicts!\n");
+				fix_conflicts();
 				// need alg
 				break ;
 			}
