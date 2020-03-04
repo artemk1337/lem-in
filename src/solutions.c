@@ -17,11 +17,15 @@ static void		init_sol_dop(t_solution *tmp_s, int size, t_solution *sol)
 	int		i;
 	t_next	*neigh;
     t_room  *room;
+    int		hide;
 
 	i = 1;
+	hide = 0;
     room = g_lemin->finish;
 	while (room != g_lemin->start)
 	{
+		if (room->path)
+			hide = 1;
         if (room != g_lemin->finish)
             room->path = tmp_s->arr;
 		neigh = room->prev->next;
@@ -31,6 +35,7 @@ static void		init_sol_dop(t_solution *tmp_s, int size, t_solution *sol)
 		room = room->prev;
 		i++;
 	}
+	tmp_s->hide = hide;
 	tmp_s->arr[size - i] = g_lemin->start;
 	g_lemin->solution = sol;
 }
