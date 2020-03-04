@@ -31,6 +31,11 @@ struct s_bandwidth	*count_solution_bandwidth(t_solution *solution)
 	prev_path_len = 0;
 	while (solution)
 	{
+		if (solution->hide)
+		{
+			solution = solution->next;
+			continue;
+		}
 		if (bandwidth->path_num)
 			bandwidth->bandwidth += bandwidth->path_num * (solution->path_len -
 					prev_path_len) + 1;
@@ -59,6 +64,8 @@ int		check_solutions(t_solution *prev_solution, t_solution *current_solution)
 
 	if (!prev_solution)
 		return (0);
+	sort_solutions(&prev_solution);
+	sort_solutions(&current_solution);
 	if ((prev_bandwidth = count_solution_bandwidth(prev_solution))->bandwidth >=
 		g_lemin->count)
 		return (1);
