@@ -59,6 +59,8 @@ int		check_solutions(t_solution *prev_solution, t_solution *current_solution)
 
 	if (!prev_solution)
 		return (0);
+	sort_solutions(&prev_solution);
+	sort_solutions(&current_solution);
 	if ((prev_bandwidth = count_solution_bandwidth(prev_solution))->bandwidth >=
 		g_lemin->count)
 		return (1);
