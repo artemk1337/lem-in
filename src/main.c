@@ -229,7 +229,7 @@ static int	put_min_weights(t_tmp *start, int counter)
 			while (prev_n && prev_n->room != curr->room)
 				prev_n = prev_n->next;
 			if (prev_n->toggle && prev_r->min_w + prev_n->weight < curr->room->min_w
-			&& prev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL) /*
+			&& prev_r != g_lemin->finish) /*
 			**addprev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL */
 			{
 				counter++;
@@ -296,10 +296,10 @@ void	algorithm(t_tmp *list)
 		}
 		if (!(g_lemin->finish->prev))
 		{
-			break ;
 			//check_struct(list);
 			if (check_conflicts())
 			{
+				ft_putstr("There're conflicts\n");
 				// if is conflict
 				// need alg
 				break ;

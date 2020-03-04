@@ -51,6 +51,7 @@ typedef struct			s_solution
 {
 	t_room				**arr;
 	unsigned int		path_len;
+	int					hide;
 	struct s_solution	*next;
 }						t_solution;
 
