@@ -296,6 +296,7 @@ void	algorithm(t_tmp *list)
 		}
 		if (!(g_lemin->finish->prev))
 		{
+			break ;
 			//check_struct(list);
 			if (check_conflicts())
 			{
@@ -309,7 +310,7 @@ void	algorithm(t_tmp *list)
 		if (!save_tmp())
 			break ;
 		/// Часть Макса
-		// test_way();
+		//test_way();
 		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
 		{
 			destroy_solutions(&g_lemin->solution);
