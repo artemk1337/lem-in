@@ -23,6 +23,8 @@ SRCS_NAME = main.c\
 			solutions_copy.c\
             check_solutions.c\
 			output.c\
+			sort_solutions.c\
+
 			
 
 ### PATH ###

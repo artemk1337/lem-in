@@ -249,34 +249,20 @@ static int	put_min_weights(t_tmp *start, int counter)
 
 int		check_conflicts(void)
 {
-	t_room	*curr_r;
-	t_next	*start_n;
-	t_next	*curr_n;
-	int		i;
+	int			i;
+	t_solution	*t_s;
 
-	start_n = g_lemin->start->next;
-	while (start_n)
+	t_s = g_lemin->solution;
+	while (t_s)
 	{
-		curr_n = start_n;
-		curr_r = g_lemin->start;
 		i = 0;
-		while (curr_n)
+		while (t_s->arr[i])
 		{
-			if (curr_n->room->prev == curr_r)
-			{
-				i = 0;
-				curr_r = curr_n->room;
-				curr_n = curr_r->next;
-			}
-			else
-			{
-				i++;
-				curr_n = curr_n->next;
-			}
+			if (t_s->arr[i]->path != t_s->arr)
+				return (1);
+			i++;
 		}
-		if (i > 2)
-			return (1);
-		start_n = start_n->next;
+		t_s = t_s->next;
 	}
 	return (0);
 }
@@ -292,10 +278,19 @@ t_solution	*find_s(t_room **arr)
 	return (NULL);
 }
 
+
+
+
 void	fix_c_(t_solution *s_1, t_solution *s_2, int i)
 {
+	s_1 += 0;
+	s_2 += 0;
+	i += 0;
 	return ;
 }
+
+
+
 
 void	fix_conflicts(void)
 {
@@ -311,7 +306,7 @@ void	fix_conflicts(void)
 			while (tmp_s->arr[i])
 			{
 
-				//ft_putstr("TEST");
+				ft_putstr("TEST");
 				if (tmp_s->arr[i] != g_lemin->start
 					&& tmp_s->arr[i] != g_lemin->finish
 					&& tmp_s->arr[i]->path != tmp_s->arr)
@@ -341,19 +336,15 @@ void	algorithm(t_tmp *list)
 		}
 		if (!(g_lemin->finish->prev))
 		{
-			//check_struct(list);
-			if (check_conflicts())
-			{
-				ft_putstr("There're conflicts!\n");
-				fix_conflicts();
-				// need alg
-				break ;
-			}
-			else
-				break ;
+			break ;
 		}
 		if (!save_tmp())
 			break ;
+		while (check_conflicts())
+		{
+			ft_putstr("There're conflicts!\n");
+			//fix_conflicts();
+		}
 		/// Часть Макса
 		//test_way();
 		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
