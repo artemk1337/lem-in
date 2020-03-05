@@ -37,6 +37,7 @@ void	print_sol(void)
 	sol = g_lemin->solution;
 	while (sol)
 	{
+		ft_putstr("Solve:\n");
 		i = 0;
 		while (sol->arr[i])
 		{

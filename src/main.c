@@ -229,7 +229,7 @@ static int	put_min_weights(t_tmp *start, int counter)
 			while (prev_n && prev_n->room != curr->room)
 				prev_n = prev_n->next;
 			if (prev_n->toggle && prev_r->min_w + prev_n->weight < curr->room->min_w
-			&& prev_r != g_lemin->finish) /*
+			&& prev_r != g_lemin->finish && !curr->room->superpos) /*
 			**addprev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL */
 			{
 				counter++;
@@ -247,26 +247,6 @@ static int	put_min_weights(t_tmp *start, int counter)
 
 
 
-int		check_conflicts(void)
-{
-	int			i;
-	t_solution	*t_s;
-
-	t_s = g_lemin->solution;
-	while (t_s)
-	{
-		i = 0;
-		while (t_s->arr[i])
-		{
-			if (t_s->arr[i]->path != t_s->arr)
-				return (1);
-			i++;
-		}
-		t_s = t_s->next;
-	}
-	return (0);
-}
-
 t_solution	*find_s(t_room **arr)
 {
 	t_solution	*tmp;
@@ -281,45 +261,132 @@ t_solution	*find_s(t_room **arr)
 
 
 
-void	fix_c_(t_solution *s_1, t_solution *s_2, int i)
+void	revive(t_room **arr)
 {
-	s_1 += 0;
-	s_2 += 0;
-	i += 0;
-	return ;
-}
+	int		i;
+	t_next	*neigh;
+	t_next	*neigh_;
 
-
-
-
-void	fix_conflicts(void)
-{
-	int			i;
-	t_solution	*tmp_s;
-
-	tmp_s = g_lemin->solution;
-	while (tmp_s)
+	i = 0;
+	while (arr[i] && arr[i + 1])
 	{
-		if (tmp_s->hide)
+		if (arr[i]->path == arr)
+			arr[i]->path = NULL;
+		neigh = arr[i]->next;
+		while (neigh && neigh->room != arr[i + 1])
+			neigh = neigh->next;
+		neigh->toggle = 1;
+		neigh_ = arr[i + 1]->next;
+		while (neigh_ && neigh_->room != arr[i])
+			neigh_ = neigh_->next;
+		if (neigh_->toggle && neigh->toggle)
 		{
-			i = 0;
-			while (tmp_s->arr[i])
-			{
-
-				ft_putstr("TEST");
-				if (tmp_s->arr[i] != g_lemin->start
-					&& tmp_s->arr[i] != g_lemin->finish
-					&& tmp_s->arr[i]->path != tmp_s->arr)
-				{
-					ft_putstr("\nIN FIX\n\n");
-					fix_c_(tmp_s, find_s(tmp_s->arr[i]->path), i);
-				}
-				i++;
-			}
+			neigh->weight = 1;
+			neigh_->weight = 1;
 		}
-		tmp_s = tmp_s->next;
+		else
+		{
+			neigh->weight = -1;
+			neigh_->weight = -1;
+		}
+		i++;
 	}
 }
+
+void	remove_sol(t_solution *sol)
+{
+	t_solution	*t_s;
+
+	t_s = g_lemin->solution;
+	while (t_s && t_s->next && t_s->next != sol)
+		t_s = t_s->next;
+	t_s->next = sol->next;
+	free(sol->arr);
+	free(sol);
+}
+
+void	put_new_arr(t_solution *sol, t_room **arr)
+{
+	int		i;
+	t_next	*neigh;
+
+	i = 0;
+	sol->arr = arr;
+	while (arr[i] && arr[i + 1])
+	{
+		if (!arr[i]->path
+			&& arr[i] != g_lemin->start
+			&& arr[i] != g_lemin->finish)
+			arr[i]->path = arr;
+		neigh = arr[i]->next;
+		while (neigh && neigh->room != arr[i + 1])
+			neigh = neigh->next;
+		neigh->toggle = 0;
+		neigh = arr[i + 1]->next;
+		while (neigh && neigh->room != arr[i])
+			neigh = neigh->next;
+		neigh->weight = -1;
+		i++;
+	}
+}
+
+void	fix_c(t_solution *s_1, t_solution *s_2, int i_1)
+{
+	t_room	**arr;
+	
+	int		i_2;
+
+	i_2 = 0;
+	s_1->arr[i_1]->superpos = 1;
+	while (s_2->arr[i_2] != s_1->arr[i_1])
+		i_2++;
+	ft_putnbr(i_2 + s_1->path_len - i_1);
+	ft_putstr(" - size\n");
+	arr = malloc(sizeof(t_room *) * (i_2 + s_1->path_len - i_1 + 1));
+	arr[i_2 + s_1->path_len - i_1] = NULL;
+	s_2->path_len = i_2 + s_1->path_len - i_1;
+	i_2 = -1;
+	while (s_2->arr[++i_2] != s_1->arr[i_1])
+		arr[i_2] = s_2->arr[i_2];
+	while (s_1->arr[i_1])
+		arr[i_2++] = s_1->arr[i_1++];
+	revive(s_1->arr);
+	revive(s_2->arr);
+	free(s_2->arr);
+	put_new_arr(s_2, arr);
+	remove_sol(s_1);
+}
+
+
+
+
+int		check_conflicts(void)
+{
+	int			i;
+	t_solution	*t_s;
+
+	t_s = g_lemin->solution;
+	while (t_s)
+	{
+		i = 0;
+		while (t_s->arr[i])
+		{
+			if (t_s->arr[i] != g_lemin->start
+				&& t_s->arr[i] != g_lemin->finish
+				&& t_s->arr[i]->path != t_s->arr
+				&& !t_s->arr[i]->superpos)
+			{
+				fix_c(t_s, find_s(t_s->arr[i]->path), i);
+				return (1);
+			}
+			i++;
+		}
+		t_s = t_s->next;
+	}
+	return (0);
+}
+
+
 
 
 void	algorithm(t_tmp *list)
@@ -340,10 +407,14 @@ void	algorithm(t_tmp *list)
 		}
 		if (!save_tmp())
 			break ;
-		while (check_conflicts())
+		i = 0;
+		print_sol();
+		if (check_conflicts())
 		{
-			ft_putstr("There're conflicts!\n");
-			//fix_conflicts();
+			ft_putstr("There was conflic!\n");
+			ft_putnbr(i++);
+			ft_putchar('\n');
+			print_sol();
 		}
 		/// Часть Макса
 		//test_way();
@@ -356,6 +427,7 @@ void	algorithm(t_tmp *list)
 		if (g_lemin->prev_solution)
 			destroy_solutions(&(g_lemin->prev_solution));
 		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		ft_putstr("TEST");
 		///
 		reset_struct(list);
 	}
