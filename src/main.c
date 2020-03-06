@@ -253,8 +253,11 @@ t_solution	*find_s(t_room **arr)
 
 	tmp = g_lemin->solution;
 	while (tmp)
+	{
 		if (tmp->arr == arr)
 			return (tmp);
+		tmp = tmp->next;
+	}
 	return (NULL);
 }
 
@@ -284,10 +287,9 @@ void	revive(t_room **arr)
 			neigh->weight = 1;
 			neigh_->weight = 1;
 		}
-		else
+		else if (!neigh_->toggle)
 		{
 			neigh->weight = -1;
-			neigh_->weight = -1;
 		}
 		i++;
 	}
@@ -330,26 +332,52 @@ void	put_new_arr(t_solution *sol, t_room **arr)
 	}
 }
 
-void	fix_c(t_solution *s_1, t_solution *s_2, int i_1)
+void	add_superpos(t_room *r)
+{
+	t_tmp *t;
+
+	if (!g_lemin->superpos_list)
+	{
+		g_lemin->superpos_list = malloc(sizeof(t_tmp));
+		g_lemin->superpos_list->next = NULL;
+		t = g_lemin->superpos_list;
+	}
+	else
+	{
+		t = g_lemin->superpos_list;
+		while (t->next)
+			t = t->next;
+		t->next = malloc(sizeof(t_tmp));
+		t = t->next;
+		t->next = NULL;
+	}
+	t->room = r;
+}
+
+void	fix_c(t_solution *s_1, t_solution *s_2, int i_)
 {
 	t_room	**arr;
 	
 	int		i_2;
 
 	i_2 = 0;
-	s_1->arr[i_1]->superpos = 1;
-	while (s_2->arr[i_2] != s_1->arr[i_1])
+	while (s_1->arr[i_]->path == s_2->arr)
+		i_++;
+	i_--;
+	s_1->arr[i_]->superpos = 1;
+	add_superpos(s_1->arr[i_]);
+	while (s_2->arr[i_2] != s_1->arr[i_])
 		i_2++;
-	ft_putnbr(i_2 + s_1->path_len - i_1);
+	ft_putnbr(i_2 + s_1->path_len - i_);
 	ft_putstr(" - size\n");
-	arr = malloc(sizeof(t_room *) * (i_2 + s_1->path_len - i_1 + 1));
-	arr[i_2 + s_1->path_len - i_1] = NULL;
-	s_2->path_len = i_2 + s_1->path_len - i_1;
+	arr = malloc(sizeof(t_room *) * (i_2 + s_1->path_len - i_ + 1));
+	arr[i_2 + s_1->path_len - i_] = NULL;
+	s_2->path_len = i_2 + s_1->path_len - i_;
 	i_2 = -1;
-	while (s_2->arr[++i_2] != s_1->arr[i_1])
+	while (s_2->arr[++i_2] != s_1->arr[i_])
 		arr[i_2] = s_2->arr[i_2];
-	while (s_1->arr[i_1])
-		arr[i_2++] = s_1->arr[i_1++];
+	while (s_1->arr[i_])
+		arr[i_2++] = s_1->arr[i_++];
 	revive(s_1->arr);
 	revive(s_2->arr);
 	free(s_2->arr);
@@ -376,7 +404,9 @@ int		check_conflicts(void)
 				&& t_s->arr[i]->path != t_s->arr
 				&& !t_s->arr[i]->superpos)
 			{
+				//ft_putstr("TEST\n");
 				fix_c(t_s, find_s(t_s->arr[i]->path), i);
+				//ft_putstr("TEST\n");
 				return (1);
 			}
 			i++;
@@ -386,6 +416,79 @@ int		check_conflicts(void)
 	return (0);
 }
 
+int		superpos_list(void)
+{
+	t_tmp *t;
+	t_tmp *t_pr;
+
+	t_pr = NULL;
+	if (g_lemin->superpos_list)
+	{
+		t = g_lemin->superpos_list;
+		while (t->next)
+		{
+			t_pr = t;
+			t = t->next;
+		}
+		t->room->superpos = 0;
+		free(t);
+		if (!t_pr)
+			g_lemin->superpos_list = NULL;
+		else
+			t_pr->next = NULL;
+		return (1);
+	}
+	return (0);
+}
+
+
+
+
+
+
+
+
+
+void	algorithm_2(t_tmp *list)
+{
+	int i;
+
+	ft_putstr("PUT");
+	while (1)
+	{
+		i = 0;
+		while (i++ < g_lemin->edge)
+		{
+			if (!put_min_weights(list, 0))
+				break ;
+		}
+		//check_struct(list);
+		if (!(g_lemin->finish->prev))
+		{
+			ft_putstr("\n2alg\n");
+			return ;
+		}
+		if (!save_tmp())
+			break ;
+		i = 0;
+		//print_sol();
+		//check_struct(list);
+		/// Часть Макса
+		//test_way();
+		// if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+		// {
+		// 	destroy_solutions(&g_lemin->solution);
+		// 	g_lemin->solution = g_lemin->prev_solution;
+		// 	return ;
+		// }
+		if (g_lemin->prev_solution)
+			destroy_solutions(&(g_lemin->prev_solution));
+		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		//ft_putstr("TEST");
+		///
+		reset_struct(list);
+	}
+}
 
 
 
@@ -403,31 +506,34 @@ void	algorithm(t_tmp *list)
 		}
 		if (!(g_lemin->finish->prev))
 		{
-			break ;
+			//reset_struct(list);
+			while (superpos_list())
+				algorithm_2(list);
+			return ;
 		}
 		if (!save_tmp())
 			break ;
 		i = 0;
 		print_sol();
-		if (check_conflicts())
+		while (check_conflicts())
 		{
 			ft_putstr("There was conflic!\n");
 			ft_putnbr(i++);
 			ft_putchar('\n');
-			print_sol();
 		}
+		//check_struct(list);
 		/// Часть Макса
 		//test_way();
-		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
-		{
-			destroy_solutions(&g_lemin->solution);
-			g_lemin->solution = g_lemin->prev_solution;
-			return ;
-		}
+		// if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+		// {
+		// 	destroy_solutions(&g_lemin->solution);
+		// 	g_lemin->solution = g_lemin->prev_solution;
+		// 	return ;
+		// }
 		if (g_lemin->prev_solution)
 			destroy_solutions(&(g_lemin->prev_solution));
 		g_lemin->prev_solution = copy_solution(g_lemin->solution);
-		ft_putstr("TEST");
+		//ft_putstr("TEST");
 		///
 		reset_struct(list);
 	}

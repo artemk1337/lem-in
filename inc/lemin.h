@@ -68,6 +68,7 @@ typedef struct			s_lemin
 	t_room				**arr;
 	t_solution			*solution;
 	t_solution			*prev_solution;
+	t_tmp				*superpos_list;
 }						t_lemin;
 
 /*

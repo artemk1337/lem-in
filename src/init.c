@@ -29,6 +29,7 @@ t_lemin	*init_lemin(void)
 	lemin->solution = NULL;
 	lemin->prev_solution = NULL;
 	lemin->edge = 0;
+	lemin->superpos_list = NULL;
 	return (lemin);
 }
 
