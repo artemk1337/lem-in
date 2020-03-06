@@ -229,7 +229,7 @@ static int	put_min_weights(t_tmp *start, int counter)
 			while (prev_n && prev_n->room != curr->room)
 				prev_n = prev_n->next;
 			if (prev_n->toggle && prev_r->min_w + prev_n->weight < curr->room->min_w
-			&& prev_r != g_lemin->finish && !curr->room->superpos) /*
+			&& prev_r != g_lemin->finish && !curr->room->superpos && !prev_r->superpos) /*
 			**addprev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL */
 			{
 				counter++;
@@ -368,8 +368,8 @@ void	fix_c(t_solution *s_1, t_solution *s_2, int i_)
 	add_superpos(s_1->arr[i_]);
 	while (s_2->arr[i_2] != s_1->arr[i_])
 		i_2++;
-	ft_putnbr(i_2 + s_1->path_len - i_);
-	ft_putstr(" - size\n");
+	//ft_putnbr(i_2 + s_1->path_len - i_);
+	//ft_putstr(" - size\n");
 	arr = malloc(sizeof(t_room *) * (i_2 + s_1->path_len - i_ + 1));
 	arr[i_2 + s_1->path_len - i_] = NULL;
 	s_2->path_len = i_2 + s_1->path_len - i_;
@@ -454,6 +454,7 @@ void	algorithm_2(t_tmp *list)
 	int i;
 
 	ft_putstr("PUT");
+	reset_struct(list);
 	while (1)
 	{
 		i = 0;
@@ -463,11 +464,15 @@ void	algorithm_2(t_tmp *list)
 				break ;
 		}
 		//check_struct(list);
+
 		if (!(g_lemin->finish->prev))
 		{
 			ft_putstr("\n2alg\n");
 			return ;
 		}
+		ft_putstr("\n2alg\n");
+		test_way();
+		check_struct(list);
 		if (!save_tmp())
 			break ;
 		i = 0;
@@ -506,7 +511,6 @@ void	algorithm(t_tmp *list)
 		}
 		if (!(g_lemin->finish->prev))
 		{
-			//reset_struct(list);
 			while (superpos_list())
 				algorithm_2(list);
 			return ;
