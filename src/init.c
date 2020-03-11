@@ -29,7 +29,7 @@ t_lemin	*init_lemin(void)
 	lemin->solution = NULL;
 	lemin->prev_solution = NULL;
 	lemin->edge = 0;
-	lemin->superpos_list = NULL;
+	lemin->sup_list = NULL;
 	return (lemin);
 }
 
@@ -47,6 +47,7 @@ t_room	*init_room(char *s)
 	room->superpos = 0;
 	room->ant = 0;
 	room->number_anc = 0;
+	room->was_sup = 0;
 	return (room);
 }
 

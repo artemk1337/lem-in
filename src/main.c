@@ -229,8 +229,11 @@ static int	put_min_weights(t_tmp *start, int counter)
 			while (prev_n && prev_n->room != curr->room)
 				prev_n = prev_n->next;
 			if (prev_n->toggle && prev_r->min_w + prev_n->weight < curr->room->min_w
-			&& prev_r != g_lemin->finish && !curr->room->superpos && !prev_r->superpos) /*
-			**addprev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL */
+			&& prev_r != g_lemin->finish && !curr->room->superpos && !prev_r->superpos
+			&& prev_r->min_w != (INT_MAX / 2) && prev_r->path == NULL && curr->room->path == NULL)
+			/*
+			**add prev_r->path == NULL && prev_r != g_lemin->finish && curr->room->path == NULL
+			*/
 			{
 				counter++;
 				curr->room->min_w = prev_r->min_w + prev_n->weight;
@@ -260,9 +263,6 @@ t_solution	*find_s(t_room **arr)
 	}
 	return (NULL);
 }
-
-
-
 
 void	revive(t_room **arr)
 {
@@ -298,101 +298,66 @@ void	revive(t_room **arr)
 void	remove_sol(t_solution *sol)
 {
 	t_solution	*t_s;
+	t_solution	*t_s_pr;
 
+	t_s_pr = NULL;
 	t_s = g_lemin->solution;
-	while (t_s && t_s->next && t_s->next != sol)
+	while (t_s != sol)
+	{
+		t_s_pr = t_s;
 		t_s = t_s->next;
-	t_s->next = sol->next;
+	}
+	if (!t_s_pr)
+		g_lemin->solution = t_s->next;
+	else
+		t_s_pr->next = t_s->next;
 	free(sol->arr);
 	free(sol);
 }
 
-void	put_new_arr(t_solution *sol, t_room **arr)
+
+
+void	add_superpos(t_room *curr_r)
 {
-	int		i;
-	t_next	*neigh;
+	t_tmp	*curr_t;
+	t_tmp	*tmp;
 
-	i = 0;
-	sol->arr = arr;
-	while (arr[i] && arr[i + 1])
+	curr_t = g_lemin->sup_list;
+	if (!g_lemin->sup_list)
 	{
-		if (!arr[i]->path
-			&& arr[i] != g_lemin->start
-			&& arr[i] != g_lemin->finish)
-			arr[i]->path = arr;
-		neigh = arr[i]->next;
-		while (neigh && neigh->room != arr[i + 1])
-			neigh = neigh->next;
-		neigh->toggle = 0;
-		neigh = arr[i + 1]->next;
-		while (neigh && neigh->room != arr[i])
-			neigh = neigh->next;
-		neigh->weight = -1;
-		i++;
-	}
-}
-
-void	add_superpos(t_room *r)
-{
-	t_tmp *t;
-
-	if (!g_lemin->superpos_list)
-	{
-		g_lemin->superpos_list = malloc(sizeof(t_tmp));
-		g_lemin->superpos_list->next = NULL;
-		t = g_lemin->superpos_list;
+		g_lemin->sup_list = malloc(sizeof(t_tmp));
+		g_lemin->sup_list->next = NULL;
+		g_lemin->sup_list->room = curr_r;
+		curr_r->superpos = 1;
+		curr_r->was_sup = 1;
 	}
 	else
 	{
-		t = g_lemin->superpos_list;
-		while (t->next)
-			t = t->next;
-		t->next = malloc(sizeof(t_tmp));
-		t = t->next;
-		t->next = NULL;
+		while (curr_t->next && curr_t->room->superpos)
+			curr_t = curr_t->next;
+		tmp = curr_t->next;
+		if (curr_r->was_sup)
+			return ;
+		curr_t->next = malloc(sizeof(t_tmp));
+		curr_t->next->room = curr_r;
+		curr_t->next->next = tmp;
+		curr_r->superpos = 1;
 	}
-	t->room = r;
+	curr_t = g_lemin->sup_list;
+	while (curr_t)
+	{
+		curr_t->room->superpos = 1;
+		curr_t = curr_t->next;
+	}
 }
-
-void	fix_c(t_solution *s_1, t_solution *s_2, int i_)
-{
-	t_room	**arr;
-	
-	int		i_2;
-
-	i_2 = 0;
-	while (s_1->arr[i_]->path == s_2->arr)
-		i_++;
-	i_--;
-	s_1->arr[i_]->superpos = 1;
-	add_superpos(s_1->arr[i_]);
-	while (s_2->arr[i_2] != s_1->arr[i_])
-		i_2++;
-	//ft_putnbr(i_2 + s_1->path_len - i_);
-	//ft_putstr(" - size\n");
-	arr = malloc(sizeof(t_room *) * (i_2 + s_1->path_len - i_ + 1));
-	arr[i_2 + s_1->path_len - i_] = NULL;
-	s_2->path_len = i_2 + s_1->path_len - i_;
-	i_2 = -1;
-	while (s_2->arr[++i_2] != s_1->arr[i_])
-		arr[i_2] = s_2->arr[i_2];
-	while (s_1->arr[i_])
-		arr[i_2++] = s_1->arr[i_++];
-	revive(s_1->arr);
-	revive(s_2->arr);
-	free(s_2->arr);
-	put_new_arr(s_2, arr);
-	remove_sol(s_1);
-}
-
-
-
 
 int		check_conflicts(void)
 {
 	int			i;
 	t_solution	*t_s;
+	int			pr;
 
+	pr = 0;
 	t_s = g_lemin->solution;
 	while (t_s)
 	{
@@ -404,41 +369,22 @@ int		check_conflicts(void)
 				&& t_s->arr[i]->path != t_s->arr
 				&& !t_s->arr[i]->superpos)
 			{
-				//ft_putstr("TEST\n");
-				fix_c(t_s, find_s(t_s->arr[i]->path), i);
-				//ft_putstr("TEST\n");
-				return (1);
+				pr = 1;
+				add_superpos(t_s->arr[i]);
 			}
 			i++;
 		}
+		if (pr)
+			return (1);
 		t_s = t_s->next;
 	}
 	return (0);
 }
 
-int		superpos_list(void)
-{
-	t_tmp *t;
-	t_tmp *t_pr;
 
-	t_pr = NULL;
-	if (g_lemin->superpos_list)
-	{
-		t = g_lemin->superpos_list;
-		while (t->next)
-		{
-			t_pr = t;
-			t = t->next;
-		}
-		t->room->superpos = 0;
-		free(t);
-		if (!t_pr)
-			g_lemin->superpos_list = NULL;
-		else
-			t_pr->next = NULL;
-		return (1);
-	}
-	return (0);
+void	start_rec()
+{
+
 }
 
 
@@ -449,51 +395,10 @@ int		superpos_list(void)
 
 
 
-void	algorithm_2(t_tmp *list)
-{
-	int i;
 
-	ft_putstr("PUT");
-	reset_struct(list);
-	while (1)
-	{
-		i = 0;
-		while (i++ < g_lemin->edge)
-		{
-			if (!put_min_weights(list, 0))
-				break ;
-		}
-		//check_struct(list);
 
-		if (!(g_lemin->finish->prev))
-		{
-			ft_putstr("\n2alg\n");
-			return ;
-		}
-		ft_putstr("\n2alg\n");
-		test_way();
-		check_struct(list);
-		if (!save_tmp())
-			break ;
-		i = 0;
-		//print_sol();
-		//check_struct(list);
-		/// Часть Макса
-		//test_way();
-		// if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
-		// {
-		// 	destroy_solutions(&g_lemin->solution);
-		// 	g_lemin->solution = g_lemin->prev_solution;
-		// 	return ;
-		// }
-		if (g_lemin->prev_solution)
-			destroy_solutions(&(g_lemin->prev_solution));
-		g_lemin->prev_solution = copy_solution(g_lemin->solution);
-		//ft_putstr("TEST");
-		///
-		reset_struct(list);
-	}
-}
+
+
 
 
 
@@ -504,28 +409,25 @@ void	algorithm(t_tmp *list)
 	while (1)
 	{
 		i = 0;
+		//print_sol();
 		while (i++ < g_lemin->edge)
-		{
 			if (!put_min_weights(list, 0))
 				break ;
-		}
+		//check_struct(list);
 		if (!(g_lemin->finish->prev))
-		{
-			while (superpos_list())
-				algorithm_2(list);
-			return ;
-		}
+			break ;
 		if (!save_tmp())
 			break ;
-		i = 0;
-		print_sol();
-		while (check_conflicts())
+		if (check_conflicts())
 		{
-			ft_putstr("There was conflic!\n");
-			ft_putnbr(i++);
-			ft_putchar('\n');
+			ft_putstr("There was a conflict!\n");
+			//start_rec();
+			break ;
 		}
-		//check_struct(list);
+		//ft_putstr("cpy\n\n");
+		if (g_lemin->prev_solution)
+			destroy_solutions(&(g_lemin->prev_solution));
+		g_lemin->prev_solution = copy_solution(g_lemin->solution);
 		/// Часть Макса
 		//test_way();
 		// if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
@@ -534,9 +436,7 @@ void	algorithm(t_tmp *list)
 		// 	g_lemin->solution = g_lemin->prev_solution;
 		// 	return ;
 		// }
-		if (g_lemin->prev_solution)
-			destroy_solutions(&(g_lemin->prev_solution));
-		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		
 		//ft_putstr("TEST");
 		///
 		reset_struct(list);

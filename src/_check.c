@@ -33,6 +33,11 @@ void	print_sol(void)
 	t_solution	*sol;
 	int			i;
 
+	if (!g_lemin->solution)
+	{
+		ft_putstr("NO SOLUTION\n");
+		return ;	
+	}
 	ft_putstr("Ways:\n\n");
 	sol = g_lemin->solution;
 	while (sol)
@@ -82,6 +87,9 @@ void	check_struct(t_tmp *tmp)
 		ft_putstr("\t| ");
 		ft_putstr("pos ");
 		ft_putnbr(tmp->room->superpos);
+		ft_putstr("\t| ");
+		ft_putstr("path ");
+		(tmp->room->path) ? ft_putnbr(1) : ft_putnbr(0);
 		neigh = tmp->room->next;
 		while (neigh)
 		{

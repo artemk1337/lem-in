@@ -32,6 +32,7 @@ typedef struct			s_room
 
 	int					min_w;
 	int					superpos;
+	int					was_sup;
 	struct s_room		*prev;
 
 	struct s_room		**path;
@@ -68,7 +69,8 @@ typedef struct			s_lemin
 	t_room				**arr;
 	t_solution			*solution;
 	t_solution			*prev_solution;
-	t_tmp				*superpos_list;
+
+	t_tmp				*sup_list;
 }						t_lemin;
 
 /*
