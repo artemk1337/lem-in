@@ -36,6 +36,7 @@ typedef struct			s_room
 	struct s_room		*prev;
 
 	struct s_room		**path;
+	int					idx;
 
 	// For ant
 	unsigned long		ant;

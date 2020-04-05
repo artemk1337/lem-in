@@ -24,19 +24,19 @@ static void		init_sol_dop(t_solution *tmp_s, int size, t_solution *sol)
     room = g_lemin->finish;
 	while (room != g_lemin->start)
 	{
-		//if (room->path)
-			//hide = 1;
         if (room != g_lemin->finish && !room->path)
             room->path = tmp_s->arr;
 		neigh = room->prev->next;
 		while (neigh->room != room)
 			neigh = neigh->next;
 		tmp_s->arr[size - i] = neigh->room;
+		room->idx = size - i;
 		room = room->prev;
 		i++;
 	}
 	tmp_s->hide = 0;
 	tmp_s->arr[size - i] = g_lemin->start;
+	tmp_s->arr[size - i]->idx = size - i;
 	g_lemin->solution = sol;
 }
 
