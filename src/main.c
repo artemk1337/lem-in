@@ -160,10 +160,6 @@ t_tmp	*create_struct(void)
 	return (tmp);
 }
 
-
-
-
-
 void	show_input()
 {
 	size_t	i;
@@ -237,6 +233,19 @@ static int	put_min_weights(t_tmp *start, int counter)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// For future. Dont use.
+
 void	remove_sol(t_solution *sol)
 {
 	t_solution	*t_s;
@@ -256,6 +265,12 @@ void	remove_sol(t_solution *sol)
 	free(sol->arr);
 	free(sol);
 }
+
+
+
+
+
+
 
 
 
@@ -308,9 +323,10 @@ static int	put_min_weights_copy(t_tmp *start, int counter)
 				curr->room->prev = prev_r;
 			}
 			// Этот кусок добавлен для выхода с пути, который уже существует
-			else if (prev_n->toggle && prev_r->path && curr->room->path != prev_r->path
+			else if (prev_n->toggle && prev_r->path && prev_r->path[prev_r->idx + 1]
+			&& curr->room->path != prev_r->path
 			&& curr->room != g_lemin->start && prev_r != g_lemin->finish
-			&& prev_r->path[prev_r->idx + 1] && prev_r->path[prev_r->idx + 1] != g_lemin->finish
+			&& prev_r->path[prev_r->idx + 1] != g_lemin->finish
 			&& prev_r->path[prev_r->idx + 1]->min_w != (INT_MAX / 2)
 			&& prev_r->path[prev_r->idx + 1]->min_w - 1 + prev_n->weight < curr->room->min_w)
 			{
@@ -318,6 +334,7 @@ static int	put_min_weights_copy(t_tmp *start, int counter)
 				prev_r->min_w = prev_r->path[prev_r->idx + 1]->min_w - 1;
 				curr->room->min_w = prev_r->min_w + prev_n->weight;
 				curr->room->prev = prev_r;
+				curr->room->prev1 = prev_r->path[prev_r->idx + 1];
 				prev_r->prev = prev_r->path[prev_r->idx + 1];
 			}
 			curr_n = curr_n->next;
@@ -328,40 +345,46 @@ static int	put_min_weights_copy(t_tmp *start, int counter)
 }
 
 
+static void	fix_problem(void)
+{
+	t_room	*curr_r;
+
+	curr_r = g_lemin->finish;
+	while (curr_r != g_lemin->start)
+	{
+		if (curr_r->prev1)
+		{
+			curr_r->prev->prev = curr_r->prev1;
+			curr_r->prev1 = NULL;	
+		}
+		curr_r = curr_r->prev;
+	}
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-static int		find_conflict(t_tmp *list)
+static int	find_conflict(t_tmp *list)
 {
 	int i;
 
-	i = 0;
-	while (i++ < g_lemin->edge)
-		if (!put_min_weights_copy(list, 0))
-			break ;
-	check_struct(list);
-	test_way();
-	if (!(g_lemin->finish->prev))
+	while (1)
 	{
-		return (1);
+		i = 0;
+		while (i++ < g_lemin->edge)
+			if (!put_min_weights_copy(list, 0))
+				break ;
+		if (!(g_lemin->finish->prev))
+			return (1);
+		else
+		{
+			fix_problem();
+			if (!save_tmp())
+				ft_putstr("Error in find conflict!\n");
+		}
+		reset_struct(list);
 	}
-	else
-		return (0);
+	
 }
+
 
 
 void	algorithm(t_tmp *list)
@@ -385,7 +408,6 @@ void	algorithm(t_tmp *list)
 		if (g_lemin->prev_solution)
 			destroy_solutions(&(g_lemin->prev_solution));
 		g_lemin->prev_solution = copy_solution(g_lemin->solution);
-		/// Часть Макса
 		//test_way();
 		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
 		{
@@ -393,9 +415,6 @@ void	algorithm(t_tmp *list)
 			g_lemin->solution = g_lemin->prev_solution;
 			return ;
 		}
-		
-		//ft_putstr("TEST");
-		///
 		reset_struct(list);
 	}
 }
@@ -422,7 +441,7 @@ void	algorithm(t_tmp *list)
 int		main()
 {
 #ifdef DEBUG
-	g_fd = open("../test_2", O_RDONLY);
+	g_fd = open("interesting_maps/gemerald4", O_RDONLY);
 #endif
 	t_tmp	*tmp;
 

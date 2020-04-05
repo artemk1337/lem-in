@@ -17,20 +17,20 @@ static void		init_sol_dop(t_solution *tmp_s, int size, t_solution *sol)
 	int		i;
 	t_next	*neigh;
     t_room  *room;
-    //int		hide;
 
 	i = 1;
-	//hide = 0;
     room = g_lemin->finish;
 	while (room != g_lemin->start)
 	{
         if (room != g_lemin->finish && !room->path)
+        {
             room->path = tmp_s->arr;
+            room->idx = size - i;
+        }
 		neigh = room->prev->next;
 		while (neigh->room != room)
 			neigh = neigh->next;
 		tmp_s->arr[size - i] = neigh->room;
-		room->idx = size - i;
 		room = room->prev;
 		i++;
 	}
@@ -59,7 +59,6 @@ void	    	init_sol(t_solution *sol, int size)
 			exit(1);
 		tmp_s = tmp_s->next;
 	}
-//	tmp_s->next = NULL;
 	if (!(tmp_s->arr = malloc(sizeof(t_room *) * (size + 1))))
 		exit(1);
 	tmp_s->arr[size] = NULL;
@@ -104,6 +103,7 @@ void			reset_struct(t_tmp *list)
 	while (tmp)
 	{
 		tmp->room->prev = NULL;
+		tmp->room->prev1 = NULL;
         if (tmp->room != g_lemin->start)
 		    tmp->room->min_w = INT_MAX / 2;
 		tmp = tmp->next;

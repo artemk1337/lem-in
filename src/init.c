@@ -42,6 +42,7 @@ t_room	*init_room(char *s)
 	room->name = ft_strdup(s);
 	room->next = NULL;
 	room->prev = NULL;
+	room->prev1 = NULL;
 	room->path = NULL;
 	room->idx = 0;
 	room->min_w = INT_MAX / 2;

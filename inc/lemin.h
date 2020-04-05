@@ -34,6 +34,7 @@ typedef struct			s_room
 	int					superpos;
 	int					was_sup;
 	struct s_room		*prev;
+	struct s_room		*prev1;
 
 	struct s_room		**path;
 	int					idx;

@@ -25,7 +25,7 @@ SRCS_NAME = main.c\
 			output.c\
 			sort_solutions.c\
 
-			
+
 
 ### PATH ###
 SRCS_PATH = src/
@@ -62,7 +62,7 @@ OBJ = $(addprefix $(OBJ_PATH), $(SRCS_NAME:.c=.o))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	@gcc $(FLAGS) $(OBJ) $(INC) -L $(LIBFT_PATH) -lft -o $(NAME)
+	@gcc $(FLAGS) $(OBJ) $(INC) -L $(LIBFT_PATH) -lft -g -o $(NAME)
 	@echo "\033[32mBinary\t\t\\033[1;32m$(NAME)\033[1;0m\033[32m created.\033[0m"
 
 $(OBJ_PATH)%.o: $(SRCS_PATH)%.c $(HEADERS)/*

@@ -21,8 +21,6 @@ void		test_way(void)
 	while (room != g_lemin->start)
 	{
 		ft_putstr(room->name);
-		ft_putstr("_");
-		ft_putnbr(room->idx);
 		ft_putstr(" <- ");
 		room = room->prev;
 	}
