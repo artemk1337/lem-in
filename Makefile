@@ -87,6 +87,6 @@ re: fclean all
 
 .PHONY: all, clean, fclean, re
 
-
+# URLs for compiler flags
 # https://developers.redhat.com/blog/2018/03/21/compiler-and-linker-flags-gcc/
 # https://stackoverflow.com/questions/3375697/useful-gcc-flags-for-c
