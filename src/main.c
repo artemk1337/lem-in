@@ -47,7 +47,8 @@ void	put_way_dop(t_tmp *tmp, t_tmp *tmp_2, char *s2, int weight)
 		while (neigh->next)
 		{
 			if (!ft_strcmp(neigh->room->name, s2))
-				error_exit();
+			    return ;
+//				error_exit();
 			neigh = neigh->next;
 		}
 		if (!(neigh->next = malloc(sizeof(t_next))))
