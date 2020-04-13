@@ -346,6 +346,120 @@ static int	put_min_weights_copy(t_tmp *start, int counter)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static void	remove_path_and_len(t_room** arr_prev, t_room** arr_target,
+	int start, int finish)
+{
+	t_solution	*tmp;
+	int			i;
+
+	i = -1;
+	while (arr_target[++i])
+	{
+		arr_target[i]->idx = 0;
+		arr_target[i]->path = NULL;
+	}
+	i = -1;
+	while (arr_prev[++i])
+	{
+		if (arr_prev == arr_prev[i]->path)
+		{
+			arr_prev[i]->idx = 0;
+			arr_prev[i]->path = NULL;
+		}
+	}
+	i = -1;
+	while (arr_prev[++i + 1] && i < start)
+			arr_prev[i + 1]->prev = arr_prev[i];
+	i = -1;
+	while (arr_target[++i + 1] != arr_prev[start])
+		;
+	while (arr_target[++i + 1])
+		arr_target[i + 1]->prev = arr_target[i];
+	if (!save_tmp())
+		ft_putstr("Problems in replacing ways 1");
+	i = -1;
+	while (arr_target[++i] != arr_prev[finish])
+		arr_target[i + 1]->prev = arr_target[i];
+	i = finish;
+	while (arr_prev[++i])
+		arr_prev[i]->prev = arr_prev[i - 1];
+	if (!save_tmp())
+		ft_putstr("Problems in replacing ways 2");
+	tmp = g_lemin->solution;
+	while (tmp)
+	{
+		if (tmp->arr == arr_target)
+		{
+			remove_sol(tmp);
+			break ;
+		}
+		else
+			tmp = tmp->next;
+	}
+	tmp = g_lemin->solution;
+	while (tmp)
+	{
+		if (tmp->arr == arr_prev)
+		{
+			remove_sol(tmp);
+			break ;
+		}
+		else
+			tmp = tmp->next;
+	}
+}
+
+
+
+static int	check_valid_ways(void)
+{
+	t_solution	*tmp;
+	int			i;
+	int			start;
+	int			finish;
+
+	tmp = g_lemin->solution;
+	while (tmp->next)
+		tmp = tmp->next;
+	i = -1;
+	while (tmp->arr[++i])
+	{
+		if (tmp->arr[i]->path != tmp->arr && tmp->arr[i]->path)
+		{
+			start = i;
+			while (tmp->arr[i + 1]->path == tmp->arr[i]->path)
+				i++;
+			finish = i;
+			remove_path_and_len(tmp->arr, tmp->arr[i]->path, start, finish);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+
+
+
+
 static void	fix_problem(void)
 {
 	t_room	*curr_r;
@@ -381,6 +495,8 @@ static int	find_conflict(t_tmp *list)
 			if (!save_tmp())
 				ft_putstr("Error in find conflict!\n");
 		}
+		while (check_valid_ways())
+			;
 		reset_struct(list);
 	}
 	
