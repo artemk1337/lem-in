@@ -12,8 +12,6 @@
 
 #include "lemin.h"
 
-#include <stdio.h>
-
 //c program hash
 
 unsigned long	hash(unsigned char *str)
