@@ -567,11 +567,12 @@ int		main()
 	g_lemin->arr = create_array(&tmp);
 	check_duplicate_nodes(g_lemin->arr);
 	algorithm(tmp);
-	print_sol();
+//	print_sol();
 	if (!(g_lemin->solution))
 		error_exit();
-	//show_input();
-	//alg_4();
-	//show_max_lines();
+	show_input();
+	alg_4();
+	show_max_lines();
+    clean_tmp(&tmp);
 	return (0);
 }
