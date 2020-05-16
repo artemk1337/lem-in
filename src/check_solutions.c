@@ -77,5 +77,7 @@ int		check_solutions(t_solution *prev_solution, t_solution *current_solution)
 		if (prev_bandwidth->bandwidth > g_lemin->count)
 			return (1);
 	}
+	free(prev_bandwidth);
+	free(curr_bandwidth);
 	return (0);
 }
