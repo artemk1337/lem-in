@@ -489,14 +489,19 @@ static int	find_conflict(t_tmp *list)
 				break ;
 		if (!(g_lemin->finish->prev))
 			return (1);
-		else
-		{
-			fix_problem();
-			if (!save_tmp())
-				ft_putstr("Error in find conflict!\n");
-		}
+		fix_problem();
+		if (g_lemin->prev_solution)
+			destroy_solutions(&(g_lemin->prev_solution));
+		g_lemin->prev_solution = copy_solution(g_lemin->solution);
+		if (!save_tmp())
+			ft_putstr("Error in find conflict!\n");
 		while (check_valid_ways())
 			;
+		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+		{
+			destroy_solutions(&g_lemin->solution);
+			g_lemin->solution = g_lemin->prev_solution;
+		}
 		reset_struct(list);
 	}
 	
