@@ -519,12 +519,12 @@ void	algorithm(t_tmp *list)
 		if (!(g_lemin->finish->prev))
 			if (find_conflict(list))
 				break ;
+        if (g_lemin->prev_solution)
+            destroy_solutions(&(g_lemin->prev_solution));
+        g_lemin->prev_solution = copy_solution(g_lemin->solution);
 		if (!save_tmp())
 			break ;
 		//ft_putstr("cpy\n\n");
-		if (g_lemin->prev_solution)
-			destroy_solutions(&(g_lemin->prev_solution));
-		g_lemin->prev_solution = copy_solution(g_lemin->solution);
 		//test_way();
 		if ((check_solutions(g_lemin->prev_solution, g_lemin->solution)))
 		{
@@ -558,7 +558,7 @@ void	algorithm(t_tmp *list)
 int		main()
 {
 #ifdef DEBUG
-	g_fd = open("interesting_maps/gemerald4", O_RDONLY);
+	g_fd = open("/home/poligon/42school/lemin/interesting_maps/gemerald4", O_RDONLY);
 #endif
 	t_tmp	*tmp;
 
@@ -568,6 +568,7 @@ int		main()
 	check_duplicate_nodes(g_lemin->arr);
 	algorithm(tmp);
 //	print_sol();
+    sort_solutions(&g_lemin->solution);
 	if (!(g_lemin->solution))
 		error_exit();
 	show_input();
