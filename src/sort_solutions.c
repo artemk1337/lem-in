@@ -12,65 +12,60 @@
 
 #include "lemin.h"
 
-void sort_solutions(t_solution **solution)
+int		len_sol(t_solution *solution)
 {
-	t_solution *begin;
-	t_solution *temp[2];
-	t_solution *main_iter;
-	t_solution *iter;
+	t_solution	*begin;
+	int			i;
+
+	begin = solution;
+	i = 0;
+	while (begin)
+	{
+		i++;
+		begin = begin->next;
+	}
+	return (i);
+}
+
+void	sort_solutions(t_solution **solution)
+{
+	t_solution	*prev;
+	t_solution	*curr;
+	t_solution	*start;
+	int			i;
+	int			max_i;
 
 	if (!*solution || !(*solution)->next)
 		return ;
-	begin = (*solution);
-	main_iter = begin->next;
-	while (main_iter)
+	start = (*solution);
+	curr = start;
+	i = 0;
+	max_i = len_sol(curr);
+	while (i < max_i)
 	{
-		iter = begin;
-		while (iter != main_iter)
+		prev = NULL;
+		curr = start;
+		while (curr && curr->next)
 		{
-			if (iter->path_len > main_iter->path_len)
+			if (curr->path_len > curr->next->path_len)
 			{
-				if (iter == begin)
+				if (!prev)
 				{
-					temp[1] = begin;
-					begin = main_iter;
-					temp[0]->next = main_iter->next;
-					main_iter->next = temp[1];
+					start = curr->next;
+					curr->next = start->next;
+					start->next = curr;
 				}
 				else
 				{
-					temp[0]->next = main_iter->next;
-					temp[1]->next = main_iter;
-					main_iter->next = iter;
+					prev->next = curr->next;
+					curr->next = prev->next->next;
+					prev->next->next = curr;
 				}
-				break ;
 			}
-			temp[1] = iter;
-			iter = iter->next;
+			prev = curr;
+			curr = curr->next;
 		}
-		temp[0] = main_iter;
-		main_iter = main_iter->next;
+		i++;
 	}
-	*solution = begin;
+	*solution = start;
 }
-
-//#include <stdlib.h>
-//
-//int main()
-//{
-//	t_solution *ptr, *begin;
-//
-//	begin = ptr = malloc(sizeof(*ptr));
-//	ptr->path_len = 8;
-//	ptr->next = malloc(sizeof(*ptr));
-//	ptr = ptr->next;
-//	ptr->path_len = 8;
-//	ptr->next = malloc(sizeof(*ptr));
-//	ptr = ptr->next;
-//	ptr->path_len = 6;
-//	ptr->next = malloc(sizeof(*ptr));
-//	ptr = ptr->next;
-//	ptr->path_len = 7;
-//	ptr->next = 0;
-//	sort_solutions(&begin);
-//}
