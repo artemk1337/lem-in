@@ -38,7 +38,7 @@ void	print_sol(void)
 		ft_putstr("NO SOLUTION\n");
 		return ;	
 	}
-	ft_putstr("Ways:\n\n");
+	ft_putstr("\nWays:\n");
 	sol = g_lemin->solution;
 	while (sol)
 	{
@@ -84,18 +84,16 @@ void	check_struct(t_tmp *tmp)
 		ft_putstr("\t| ");
 		ft_putstr("prev ");
 		ft_putstr((tmp->room->prev) ? tmp->room->prev->name : "NULL");
-		ft_putstr("\t| ");
-		ft_putstr("pos ");
-		ft_putnbr(tmp->room->superpos);
-		ft_putstr("\t| ");
-		ft_putstr("path ");
-		(tmp->room->path) ? ft_putnbr(1) : ft_putnbr(0);
+		ft_putstr((tmp->room->prev && tmp->room->prev->out) ? "_in" : "");
+		ft_putstr((tmp->room->prev && tmp->room->prev->in) ? "_out" : "");
 		neigh = tmp->room->next;
 		while (neigh)
 		{
 			ft_putstr("\n\t");
 			ft_putstr("next ");
 			ft_putstr(neigh->room->name);
+			ft_putstr((neigh->room->out) ? "_in" : "");
+			ft_putstr((neigh->room->in) ? "_out" : "");
 			ft_putstr("\t| ");
 			ft_putstr("weight ");
 			if (neigh->weight >= 0)
@@ -104,6 +102,9 @@ void	check_struct(t_tmp *tmp)
 			ft_putstr("\t| ");
 			ft_putstr("toggle ");
 			ft_putnbr(neigh->toggle);
+			ft_putstr("\t| ");
+			ft_putstr("global_toggle ");
+			ft_putnbr(neigh->global_toggle);
 			neigh = neigh->next;
 		}
 		ft_putstr("\n");

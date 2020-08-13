@@ -22,6 +22,7 @@ typedef struct			s_next
 	struct s_room		*room;
 	int					weight;
 	int					toggle;
+	int					global_toggle;
 	struct s_next		*next;
 }						t_next;
 
@@ -29,19 +30,19 @@ typedef struct			s_room
 {
 	char				*name;
 	t_next				*next;
+	int					was_here;
 
 	int					min_w;
-	int					superpos;
-	int					was_sup;
 	struct s_room		*prev;
-	struct s_room		*prev1;
+	struct s_room		*in;
+	struct s_room		*out;
 
 	struct s_room		**path;
 	int					idx;
 
 	// For ant
 	unsigned long		ant;
-	unsigned long		number_anc;
+	unsigned long		number_ant;
 }						t_room;
 
 typedef struct			s_tmp
@@ -54,7 +55,6 @@ typedef struct			s_solution
 {
 	t_room				**arr;
 	unsigned int		path_len;
-	int					hide;
 	struct s_solution	*next;
 }						t_solution;
 
@@ -96,11 +96,9 @@ void					print_sol(void);
 void					test_way(void);
 
 /*
-** solution.c
+** save_solution.c
 */
-int						save_tmp(void);
-void					reset_struct(t_tmp *list);
-void	    			init_sol(t_solution *sol, int size);
+void					reset_minw_prev(t_tmp *list);
 
 /*
 ** clear.c

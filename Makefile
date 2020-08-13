@@ -19,7 +19,7 @@ SRCS_NAME = main.c\
 			validation.c\
 			_check.c\
 			clear.c\
-			solutions.c\
+			save_solution.c\
 			solutions_copy.c\
             check_solutions.c\
 			output.c\
@@ -33,7 +33,7 @@ OBJ_PATH  = obj/
 LIBFT_PATH = libft/
 LIBFT = $(LIBFT_PATH)libft.a
 
-FLAGS = -Wall \
+FLAGS = #-Wall \
 		-Werror \
 		-Wextra \
 		-ftrapv \

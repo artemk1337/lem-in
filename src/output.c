@@ -35,7 +35,7 @@ int			check_ant(t_solution *sol, int len_way)
 	return (0);
 }
 
-static void	print_anc(int c, char *s)
+static void	print_ant(int c, char *s)
 {
 	ft_putstr("L");
 	ft_putnbr(c);
@@ -62,11 +62,11 @@ static void	move_ant(t_solution *sol, int len_way)
 			curr_r->ant += 1;
 			pr_r->ant -= 1;
 			if (len_way > 1)
-				curr_r->number_anc = pr_r->number_anc;
+				curr_r->number_ant = pr_r->number_ant;
 			else
-				curr_r->number_anc = g_lemin->count - pr_r->ant;
-			pr_r->number_anc = 0;
-			print_anc(curr_r->number_anc, curr_r->name);
+				curr_r->number_ant = g_lemin->count - pr_r->ant;
+			pr_r->number_ant = 0;
+			print_ant(curr_r->number_ant, curr_r->name);
 		}
 		len_way--;
 	}

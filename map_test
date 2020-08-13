@@ -1,0 +1,8 @@
+2
+##start
+a 1 1
+##end
+c 2 2
+b 3 3
+a-b
+b-c
