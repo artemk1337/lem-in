@@ -44,7 +44,7 @@ static void	print_ant(int c, char *s)
 	ft_putstr(" ");
 }
 
-static void	move_ant(t_solution *sol, int len_way)
+static void	move_ant(t_solution *sol, int len_way, int print)
 {
 	t_room	*curr_r;
 	t_room	*pr_r;
@@ -66,13 +66,14 @@ static void	move_ant(t_solution *sol, int len_way)
 			else
 				curr_r->number_ant = g_lemin->count - pr_r->ant;
 			pr_r->number_ant = 0;
-			print_ant(curr_r->number_ant, curr_r->name);
+			if (print)
+				print_ant(curr_r->number_ant, curr_r->name);
 		}
 		len_way--;
 	}
 }
 
-void		alg_4(void)
+int			alg_4(int print)
 {
 	t_solution	*sol;
 	int			i;
@@ -88,12 +89,17 @@ void		alg_4(void)
 		sol = g_lemin->solution;
 		while (sol)
 		{
-			move_ant(sol, sol->path_len);
+			move_ant(sol, sol->path_len, print);
 			sol = sol->next;
 			i++;
 		}
-		ft_putstr("\t| step - ");
-		ft_putnbr(step++);
-		ft_putstr("\n");
+		if (print)
+		{
+			ft_putstr("\t| step - ");
+			ft_putnbr(step);
+			ft_putstr("\n");
+		}
+		step++;
 	}
+	return (step - 1);
 }

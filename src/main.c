@@ -737,9 +737,9 @@ void	algorithm(t_tmp *list)
 
 
 	count_sol = 0;
-	max_ways = 1;
-	while (1)
-	{
+	max_ways = 8;
+	// while (1)
+	// {
 		while (max_ways != count_sol)
 		{
 			// Нашли кратчайший путь
@@ -754,8 +754,8 @@ void	algorithm(t_tmp *list)
 			//test_way();
 			if (!g_lemin->finish->prev)
 			{
-				ft_putstr("Best ways: \n");
-				ft_putnbr(max_ways);
+				ft_putstr("RETURN; Best steps: ");
+				ft_putnbr(alg_4(0));
 				ft_putstr("\n");
 				return ;
 			}
@@ -786,10 +786,10 @@ void	algorithm(t_tmp *list)
 		}
 		//check_sol();  ПРОБЛЕМА ТУТ!!!
 		max_ways++;
-	}
-	ft_putstr("Best ways: \n");
-	ft_putnbr(max_ways);
-	ft_putstr("\n");
+	// }
+// 	ft_putstr("Best ways: \n");
+// 	ft_putnbr(max_ways);
+// 	ft_putstr("\n");
 }
 
 
@@ -809,12 +809,12 @@ int		main()
 	check_duplicate_nodes(g_lemin->arr);
 	algorithm(tmp);
 	//g_lemin->solution = g_lemin->prev_solution;
-	print_sol();
+	//print_sol();
     sort_solutions(&g_lemin->solution);
 	if (!(g_lemin->solution))
 		error_exit();
 	//show_input();
-	alg_4();
+	// alg_4();
 	show_max_lines();
     clean_tmp(&tmp);
 	return (0);

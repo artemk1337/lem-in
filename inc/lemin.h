@@ -122,7 +122,7 @@ void					error_exit(void);
 /*
 ** output.c
 */
-void					alg_4(void);
+int						alg_4(int print);
 
 /*
 ** global VARS
