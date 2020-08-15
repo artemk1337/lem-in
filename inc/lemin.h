@@ -132,8 +132,6 @@ t_lemin					*g_lemin;
 /*
 ** Solution copy and destroy
 */
-t_solution				*copy_solution(t_solution *source_solutions);
-void					destroy_solutions(t_solution **solution);
 int						check_solutions(t_solution *prev_solution,
 										t_solution *current_solution);
 void					sort_solutions(t_solution **solution);
