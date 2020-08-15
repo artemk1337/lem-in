@@ -635,100 +635,12 @@ int		suurballe(t_tmp *list)
 }
 
 
-/* <===========================================> */
-/* <========== Проверка лучших путей ==========> */
-/* <=============== В процессе ================> */
-
-
-// struct s_bandwidth
-// {
-// 	unsigned int	path_num;
-// 	unsigned int	max_len;
-// 	unsigned int	bandwidth; // max bandwidth for max_len moves
-// 	t_solution		*solution;
-// };
-
-
-// struct s_bandwidth	*count_solution_bandwidth(t_solution *solution)
-// {
-// 	int					prev_path_len;
-// 	struct s_bandwidth *bandwidth;
-
-// 	bandwidth = ft_memalloc(sizeof(*bandwidth));
-// 	bandwidth->bandwidth = 1;
-// 	prev_path_len = 0;
-// 	while (solution)
-// 	{
-// 		if (bandwidth->path_num)
-// 			bandwidth->bandwidth += bandwidth->path_num * (solution->path_len -
-// 					prev_path_len) + 1;
-// 		prev_path_len = solution->path_len;
-// 		bandwidth->path_num++;
-// 		bandwidth->max_len = solution->path_len > bandwidth->max_len ?
-// 				solution->path_len : bandwidth->max_len;
-// 		solution = solution->next;
-// 	}
-// 	return (bandwidth);
-// }
-
-// /*
-// ** Function check_solutions
-// ** ------------------------
-// ** 	prev_solution: solution from previous step
-// **	current_solution: solution from current step
-// **
-// **	return 0 if current solution better, else 1
-// */
-// int		check_solutions(t_solution *prev_solution, t_solution *current_solution)
-// {
-// 	struct s_bandwidth	*prev_bandwidth;
-// 	struct s_bandwidth	*curr_bandwidth;
-// 	unsigned int		counter;
-
-// 	if (!prev_solution)
-// 		return (0);
-// 	sort_solutions(&prev_solution);
-// 	sort_solutions(&current_solution);
-// 	if ((prev_bandwidth = count_solution_bandwidth(prev_solution))->bandwidth >=
-// 		g_lemin->count)
-// 		return (1);
-// 	curr_bandwidth = count_solution_bandwidth(current_solution);
-// 	counter = curr_bandwidth->max_len - prev_bandwidth->max_len;
-// 	while (counter--)
-// 	{
-// 		prev_bandwidth->bandwidth += prev_bandwidth->path_num;
-// 		if (prev_bandwidth->bandwidth > g_lemin->count)
-// 			return (1);
-// 	}
-// 	free(prev_bandwidth);
-// 	free(curr_bandwidth);
-// 	return (0);
-// }
-
-
-// void	check_sol()
-// {
-// 	if (!(check_solutions(g_lemin->prev_solution, g_lemin->solution)))
-// 	{
-// 		if (g_lemin->prev_solution)
-// 			del_sol(g_lemin->prev_solution);
-// 		g_lemin->prev_solution = g_lemin->solution;
-// 		g_lemin->solution = NULL;
-// 	}
-// 	else
-// 	{
-// 		del_sol(&(g_lemin->solution));
-// 		g_lemin->solution = NULL;
-// 	}
-// }
-
-
 /* <==============================> */
 /* <========== Алгоритм ==========> */
 /* <=========== Готово ===========> */
 
 
-void	algorithm(t_tmp *list, int max_ways)
+int		algorithm(t_tmp *list, int max_ways)
 {
 	int i;
 	//int	max_ways;
@@ -736,11 +648,12 @@ void	algorithm(t_tmp *list, int max_ways)
 
 
 	count_sol = 0;
-	// if (g_lemin->solution)
-	// {
-	// 	del_sol(&(g_lemin->solution));
-	// 	g_lemin->solution = NULL;
-	// }
+	if (g_lemin->solution)
+	{
+		//ft_putstr("CLEANER\n");
+		del_sol(&(g_lemin->solution));
+		g_lemin->solution = NULL;
+	}
 	// max_ways = 8;
 	while (max_ways != count_sol)
 	{
@@ -756,13 +669,13 @@ void	algorithm(t_tmp *list, int max_ways)
 		//test_way();
 		if (!g_lemin->finish->prev)
 		{
-			ft_putstr("RETURN; Best steps: ");
-			ft_putnbr(alg_4(0));
-			ft_putstr("\n");
+			//ft_putstr("RETURN; Best steps: ");
+			//ft_putnbr(alg_4(0));
+			//ft_putstr("\n");
 
 			reset_graph(list);
 			reset_minw_prev(list);
-			return ;
+			return (0);
 		}
 		//ft_putstr("After return\n");
 		//check_struct(list);
@@ -789,6 +702,9 @@ void	algorithm(t_tmp *list, int max_ways)
 		reset_minw_prev(list);
 		//check_struct(list);
 	}
+	reset_graph(list);
+	reset_minw_prev(list);
+	return (1);
 }
 
 
@@ -802,30 +718,48 @@ int		main()
 #endif
 	t_tmp	*tmp;
 	int		steps;
+	int		tmp_;
 	int		ways;
+	int		max_steps;
 
 	g_lemin = init_lemin();
 	tmp = create_struct();
 	g_lemin->arr = create_array(&tmp);
 	check_duplicate_nodes(g_lemin->arr);
-	ways = 0;
-	while (++ways < 15)
+	ways = 1;
+	tmp_ = 1;
+	max_steps = -1;
+	while (tmp_)
 	{
-		algorithm(tmp, ways);
-		ft_putstr("Steps: ");
-		ft_putnbr(alg_4(0));
-		ft_putstr("");
-		ft_putstr(" ways: ");
-		ft_putnbr(ways);
-		ft_putstr("\n");
+		tmp_ = algorithm(tmp, ways);
+		steps = alg_4(0);
+		if (max_steps == -1)
+		{
+			max_steps = steps;
+			g_lemin->prev_solution = g_lemin->solution;
+			g_lemin->solution = NULL;
+		}
+		else if (max_steps > steps)
+		{
+			if (g_lemin->prev_solution)
+				del_sol(&g_lemin->prev_solution);
+			max_steps = steps;
+			g_lemin->prev_solution = g_lemin->solution;
+			g_lemin->solution = NULL;
+		}
+		else if (max_steps < steps)
+			break ;
+		ways++;
 	}
-	//g_lemin->solution = g_lemin->prev_solution;
-	//print_sol();
+	if (g_lemin->solution)
+		del_sol(&g_lemin->solution);
+	g_lemin->solution = g_lemin->prev_solution;
+	// print_sol();
     sort_solutions(&g_lemin->solution);
 	if (!(g_lemin->solution))
 		error_exit();
 	//show_input();
-	// alg_4();
+	alg_4(1);
 	show_max_lines();
     clean_tmp(&tmp);
 	return (0);
