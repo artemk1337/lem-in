@@ -481,6 +481,7 @@ void	reset_graph(t_tmp *list)
 	curr = list;
 	while (curr && curr->next && !curr->next->room->out)
 		curr = curr->next;
+	// Указатель на NULL
 	next = curr->next;
 	curr->next = NULL;
 	// Зачищаю список и переношу связи
@@ -645,50 +646,47 @@ void	algorithm(t_tmp *list)
 	int	max_ways;
 	int	count_sol;
 
-	while (1)
+	count_sol = 0;
+	max_ways = 8;
+	while (max_ways != count_sol)
 	{
-		count_sol = 0;
-		max_ways = 100;
-		while (max_ways != count_sol)
+		// Нашли кратчайший путь
+		i = 0;
+		//print_sol();
+		//ft_putstr("Bellman-Ford started\n");
+		while (i++ < g_lemin->edge)
+			if (!bellman_ford(list, 0))
+				break ;
+		//ft_putstr("Bellman-Ford finished\n");
+		check_struct(list);
+		//test_way();
+		if (!g_lemin->finish->prev)
+			return ;
+		
+		//check_struct(list);
+		//test_way();
+		i = suurballe(list); // Проблема здесь
+		//test_way();
+		if (i)
 		{
-			// Нашли кратчайший путь
-			i = 0;
-			//print_sol();
-			//ft_putstr("Bellman-Ford started\n");
-			while (i++ < g_lemin->edge)
-				if (!bellman_ford(list, 0))
-					break ;
-			//ft_putstr("Bellman-Ford finished\n");
+			//test_way();
+			save_way(i);
+		}
+		else
+		{
+			//ft_putstr("Problems with way, need reset and restart\n");
+			//exit(1);
+			del_sol(g_lemin->solution);
+			g_lemin->solution = NULL;
 			//check_struct(list);
-			//test_way();
-			if (!g_lemin->finish->prev)
-				return ;
-			
-			//check_struct(list);
-			//test_way();
-			i = suurballe(list); // Проблема здесь
-			//test_way();
-			if (i)
-			{
-				//test_way();
-				save_way(i);
-			}
-			else
-			{
-				//ft_putstr("Problems with way, need reset and restart\n");
-				//exit(1);
-				del_sol(g_lemin->solution);
-				g_lemin->solution = NULL;
-				//check_struct(list);
-				reset_graph(list);
-				//check_struct(list);
-			}
-			count_sol = count_sols(g_lemin->solution);
-			reset_minw_prev(list);
+			reset_graph(list);
 			//check_struct(list);
 		}
-		//ft_putstr("\nSuccess\n");
+		count_sol = count_sols(g_lemin->solution);
+		reset_minw_prev(list);
+		//check_struct(list);
 	}
+	//ft_putstr("\nSuccess\n");
 }
 
 
