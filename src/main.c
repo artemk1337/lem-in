@@ -307,16 +307,16 @@ void	save_way(int len_way)
 /* <=============== Готово ===============> */
 
 
-void	del_sol(t_solution *sol)
+void	del_sol(t_solution **solution)
 {
-	t_solution	*tmp;
+	t_solution *temp;
 
-	while (sol)
+	while (*solution)
 	{
-		free(sol->arr);
-		tmp = sol->next;
-		free(sol);
-		sol = tmp;
+		free((*solution)->arr);
+		temp = (*solution)->next;
+		free(*solution);
+		*solution = temp;
 	}
 }
 
@@ -409,7 +409,7 @@ t_room	*split_room(t_room *curr, t_tmp *list)
 		ft_putstr("ERROR 1\n");
 		exit(1);
 	}
-	g_lemin->finish->was_here = 1;
+	// g_lemin->finish->was_here = 1;
 	// Создал комнату
 	list = init_tmp(list, 1, curr->name); // ft_strjoin(curr->name, "123")
 	in = find_last_room(list);
@@ -497,13 +497,10 @@ void	reset_graph(t_tmp *list)
 		out = curr->room->out;
 		// Переношу связь с in на предыдущую комнату
 		neigh_neigh = out->next;
-		while (neigh_neigh && neigh_neigh->room != curr->room)
+		while (neigh_neigh->room != curr->room)
 			neigh_neigh = neigh_neigh->next;
-		if (neigh_neigh)
-		{
-			neigh_neigh->room = curr->room->next->room;
-			neigh_neigh->global_toggle = curr->room->next->global_toggle;
-		}
+		neigh_neigh->room = curr->room->next->room;
+		neigh_neigh->global_toggle = curr->room->next->global_toggle;
 		// Переношу связи на out
 		neigh = out->next;
 		while (neigh)
@@ -562,6 +559,8 @@ void			reset_minw_prev(t_tmp *list)
         if (tmp->room != g_lemin->start)
 		    tmp->room->min_w = INT_MAX / 2;
 		tmp->room->was_here = 0;
+		tmp->room->ant = 0;
+		tmp->room->number_ant = 0;
 		tmp = tmp->next;
 	}
 }
@@ -641,87 +640,87 @@ int		suurballe(t_tmp *list)
 /* <=============== В процессе ================> */
 
 
-struct s_bandwidth
-{
-	unsigned int	path_num;
-	unsigned int	max_len;
-	unsigned int	bandwidth; // max bandwidth for max_len moves
-	t_solution		*solution;
-};
+// struct s_bandwidth
+// {
+// 	unsigned int	path_num;
+// 	unsigned int	max_len;
+// 	unsigned int	bandwidth; // max bandwidth for max_len moves
+// 	t_solution		*solution;
+// };
 
 
-struct s_bandwidth	*count_solution_bandwidth(t_solution *solution)
-{
-	int					prev_path_len;
-	struct s_bandwidth *bandwidth;
+// struct s_bandwidth	*count_solution_bandwidth(t_solution *solution)
+// {
+// 	int					prev_path_len;
+// 	struct s_bandwidth *bandwidth;
 
-	bandwidth = ft_memalloc(sizeof(*bandwidth));
-	bandwidth->bandwidth = 1;
-	prev_path_len = 0;
-	while (solution)
-	{
-		if (bandwidth->path_num)
-			bandwidth->bandwidth += bandwidth->path_num * (solution->path_len -
-					prev_path_len) + 1;
-		prev_path_len = solution->path_len;
-		bandwidth->path_num++;
-		bandwidth->max_len = solution->path_len > bandwidth->max_len ?
-				solution->path_len : bandwidth->max_len;
-		solution = solution->next;
-	}
-	return (bandwidth);
-}
+// 	bandwidth = ft_memalloc(sizeof(*bandwidth));
+// 	bandwidth->bandwidth = 1;
+// 	prev_path_len = 0;
+// 	while (solution)
+// 	{
+// 		if (bandwidth->path_num)
+// 			bandwidth->bandwidth += bandwidth->path_num * (solution->path_len -
+// 					prev_path_len) + 1;
+// 		prev_path_len = solution->path_len;
+// 		bandwidth->path_num++;
+// 		bandwidth->max_len = solution->path_len > bandwidth->max_len ?
+// 				solution->path_len : bandwidth->max_len;
+// 		solution = solution->next;
+// 	}
+// 	return (bandwidth);
+// }
 
-/*
-** Function check_solutions
-** ------------------------
-** 	prev_solution: solution from previous step
-**	current_solution: solution from current step
-**
-**	return 0 if current solution better, else 1
-*/
-int		check_solutions(t_solution *prev_solution, t_solution *current_solution)
-{
-	struct s_bandwidth	*prev_bandwidth;
-	struct s_bandwidth	*curr_bandwidth;
-	unsigned int		counter;
+// /*
+// ** Function check_solutions
+// ** ------------------------
+// ** 	prev_solution: solution from previous step
+// **	current_solution: solution from current step
+// **
+// **	return 0 if current solution better, else 1
+// */
+// int		check_solutions(t_solution *prev_solution, t_solution *current_solution)
+// {
+// 	struct s_bandwidth	*prev_bandwidth;
+// 	struct s_bandwidth	*curr_bandwidth;
+// 	unsigned int		counter;
 
-	if (!prev_solution)
-		return (0);
-	sort_solutions(&prev_solution);
-	sort_solutions(&current_solution);
-	if ((prev_bandwidth = count_solution_bandwidth(prev_solution))->bandwidth >=
-		g_lemin->count)
-		return (1);
-	curr_bandwidth = count_solution_bandwidth(current_solution);
-	counter = curr_bandwidth->max_len - prev_bandwidth->max_len;
-	while (counter--)
-	{
-		prev_bandwidth->bandwidth += prev_bandwidth->path_num;
-		if (prev_bandwidth->bandwidth > g_lemin->count)
-			return (1);
-	}
-	free(prev_bandwidth);
-	free(curr_bandwidth);
-	return (0);
-}
+// 	if (!prev_solution)
+// 		return (0);
+// 	sort_solutions(&prev_solution);
+// 	sort_solutions(&current_solution);
+// 	if ((prev_bandwidth = count_solution_bandwidth(prev_solution))->bandwidth >=
+// 		g_lemin->count)
+// 		return (1);
+// 	curr_bandwidth = count_solution_bandwidth(current_solution);
+// 	counter = curr_bandwidth->max_len - prev_bandwidth->max_len;
+// 	while (counter--)
+// 	{
+// 		prev_bandwidth->bandwidth += prev_bandwidth->path_num;
+// 		if (prev_bandwidth->bandwidth > g_lemin->count)
+// 			return (1);
+// 	}
+// 	free(prev_bandwidth);
+// 	free(curr_bandwidth);
+// 	return (0);
+// }
 
 
-void	check_sol()
-{
-	if (!(check_solutions(g_lemin->prev_solution, g_lemin->solution)))
-	{
-		if (g_lemin->prev_solution)
-			del_sol(g_lemin->prev_solution);
-		g_lemin->prev_solution = g_lemin->solution;
-		g_lemin->solution = NULL;
-	}
-	else
-	{
-		del_sol(g_lemin->solution);
-		g_lemin->solution = NULL;
-	}
-}
+// void	check_sol()
+// {
+// 	if (!(check_solutions(g_lemin->prev_solution, g_lemin->solution)))
+// 	{
+// 		if (g_lemin->prev_solution)
+// 			del_sol(g_lemin->prev_solution);
+// 		g_lemin->prev_solution = g_lemin->solution;
+// 		g_lemin->solution = NULL;
+// 	}
+// 	else
+// 	{
+// 		del_sol(&(g_lemin->solution));
+// 		g_lemin->solution = NULL;
+// 	}
+// }
 
 
 /* <==============================> */
@@ -729,67 +728,67 @@ void	check_sol()
 /* <=========== Готово ===========> */
 
 
-void	algorithm(t_tmp *list)
+void	algorithm(t_tmp *list, int max_ways)
 {
 	int i;
-	int	max_ways;
+	//int	max_ways;
 	int	count_sol;
 
 
 	count_sol = 0;
-	max_ways = 8;
-	// while (1)
+	// if (g_lemin->solution)
 	// {
-		while (max_ways != count_sol)
+	// 	del_sol(&(g_lemin->solution));
+	// 	g_lemin->solution = NULL;
+	// }
+	// max_ways = 8;
+	while (max_ways != count_sol)
+	{
+		// Нашли кратчайший путь
+		i = 0;
+		//print_sol();
+		//ft_putstr("Bellman-Ford started\n");
+		while (i++ < g_lemin->edge)
+			if (!bellman_ford(list, 0))
+				break ;
+		//ft_putstr("Bellman-Ford finished\n");
+		//check_struct(list);
+		//test_way();
+		if (!g_lemin->finish->prev)
 		{
-			// Нашли кратчайший путь
-			i = 0;
-			//print_sol();
-			//ft_putstr("Bellman-Ford started\n");
-			while (i++ < g_lemin->edge)
-				if (!bellman_ford(list, 0))
-					break ;
-			//ft_putstr("Bellman-Ford finished\n");
-			//check_struct(list);
-			//test_way();
-			if (!g_lemin->finish->prev)
-			{
-				ft_putstr("RETURN; Best steps: ");
-				ft_putnbr(alg_4(0));
-				ft_putstr("\n");
-				return ;
-			}
-			//ft_putstr("After return\n");
-			//check_struct(list);
-			//test_way();
-			i = suurballe(list); // Проблема здесь
-			//ft_putstr("After suurballe\n");
-			//test_way();
-			if (i)
-			{
-				//test_way();
-				save_way(i);
-			}
-			else
-			{
-				//ft_putstr("Problems with way, need reset and restart\n");
-				//exit(1);
-				del_sol(g_lemin->solution);
-				g_lemin->solution = NULL;
-				//check_struct(list);
-				reset_graph(list);
-				//check_struct(list);
-			}
-			count_sol = count_sols(g_lemin->solution);
+			ft_putstr("RETURN; Best steps: ");
+			ft_putnbr(alg_4(0));
+			ft_putstr("\n");
+
+			reset_graph(list);
 			reset_minw_prev(list);
+			return ;
+		}
+		//ft_putstr("After return\n");
+		//check_struct(list);
+		//test_way();
+		i = suurballe(list); // Проблема здесь
+		//ft_putstr("After suurballe\n");
+		//test_way();
+		if (i)
+		{
+			//test_way();
+			save_way(i);
+		}
+		else
+		{
+			//ft_putstr("Problems with way, need reset and restart\n");
+			//exit(1);
+			del_sol(&(g_lemin->solution));
+			g_lemin->solution = NULL;
+			//check_struct(list);
+			reset_graph(list);
 			//check_struct(list);
 		}
-		//check_sol();  ПРОБЛЕМА ТУТ!!!
-		max_ways++;
-	// }
-// 	ft_putstr("Best ways: \n");
-// 	ft_putnbr(max_ways);
-// 	ft_putstr("\n");
+		count_sol = count_sols(g_lemin->solution);
+		reset_minw_prev(list);
+		//check_struct(list);
+	}
 }
 
 
@@ -802,12 +801,24 @@ int		main()
 	g_fd = open("/home/poligon/42school/lemin/interesting_maps/gemerald4", O_RDONLY);
 #endif
 	t_tmp	*tmp;
+	int		steps;
+	int		ways;
 
 	g_lemin = init_lemin();
 	tmp = create_struct();
 	g_lemin->arr = create_array(&tmp);
 	check_duplicate_nodes(g_lemin->arr);
-	algorithm(tmp);
+	ways = 0;
+	while (++ways < 15)
+	{
+		algorithm(tmp, ways);
+		ft_putstr("Steps: ");
+		ft_putnbr(alg_4(0));
+		ft_putstr("");
+		ft_putstr(" ways: ");
+		ft_putnbr(ways);
+		ft_putstr("\n");
+	}
 	//g_lemin->solution = g_lemin->prev_solution;
 	//print_sol();
     sort_solutions(&g_lemin->solution);

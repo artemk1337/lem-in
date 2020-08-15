@@ -81,7 +81,7 @@ int			alg_4(int print)
 
 	g_lemin->start->ant = g_lemin->count;
 	g_lemin->finish->ant = 0;
-	ft_putstr("\tSolution:\n\n");
+	//ft_putstr("\tSolution:\n\n");
 	step = 1;
 	while (g_lemin->finish->ant != g_lemin->count)
 	{
