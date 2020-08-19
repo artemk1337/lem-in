@@ -12,8 +12,6 @@
 
 #include "lemin.h"
 
-//c program hash
-
 unsigned long	hash(unsigned char *str)
 {
 	unsigned long	hash;
@@ -21,8 +19,8 @@ unsigned long	hash(unsigned char *str)
 
 	hash = 5381;
 	while ((c = (*str++)))
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	return hash;
+		hash = ((hash << 5) + hash) + c;
+	return (hash);
 }
 
 void			add_el_in_array(t_room *room, t_room **array)
@@ -37,27 +35,26 @@ void			add_el_in_array(t_room *room, t_room **array)
 	array[i] = room;
 }
 
-// Не чищу!!! 
 t_room			**create_array(t_tmp **list_begin)
 {
 	t_room	**rooms_array;
-	t_tmp	*start; // Добавил
+	t_tmp	*start;
 	int		i;
 	t_tmp	*temp_ptr;
 
-	rooms_array = ft_memalloc(sizeof(t_room*) * g_lemin->rooms * g_lemin->rooms);
+	rooms_array = ft_memalloc(sizeof(t_room*) * g_lemin->rooms *
+		g_lemin->rooms);
 	i = -1;
-	start = *list_begin; // Добавил
+	start = *list_begin;
 	while (++i < g_lemin->rooms)
 	{
 		temp_ptr = *list_begin;
 		add_el_in_array(temp_ptr->room, rooms_array);
 		temp_ptr = (*list_begin)->next;
-		//free(*list_begin); // Добавил
 		*list_begin = temp_ptr;
 	}
-	*list_begin = start; // Добавил
-	return rooms_array;
+	*list_begin = start;
+	return (rooms_array);
 }
 
 t_room			*find_element(char *name, t_room **room_array)
