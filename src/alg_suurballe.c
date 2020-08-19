@@ -12,18 +12,35 @@
 
 #include "lemin.h"
 
+int		dop_alg(t_tmp *list)
+{
+	int count_sol;
+	int i;
 
+	i = suurballe(list);
+	if (i)
+		save_way(i);
+	else
+	{
+		del_sol(&(g_lemin->solution));
+		g_lemin->solution = NULL;
+		reset_graph(list);
+	}
+	count_sol = count_sols(g_lemin->solution);
+	reset_minw_prev(list);
+	return (count_sol);
+}
 
-/* <==============================> */
-/* <========== Алгоритм ==========> */
-/* <=========== Готово ===========> */
-
+void	reset_all(t_tmp *list)
+{
+	reset_graph(list);
+	reset_minw_prev(list);
+}
 
 int		algorithm(t_tmp *list, int max_ways)
 {
 	int i;
 	int	count_sol;
-
 
 	count_sol = 0;
 	if (g_lemin->solution)
@@ -39,23 +56,11 @@ int		algorithm(t_tmp *list, int max_ways)
 				break ;
 		if (!g_lemin->finish->prev)
 		{
-			reset_graph(list);
-			reset_minw_prev(list);
+			reset_all(list);
 			return (0);
 		}
-		i = suurballe(list);
-		if (i)
-			save_way(i);
-		else
-		{
-			del_sol(&(g_lemin->solution));
-			g_lemin->solution = NULL;
-			reset_graph(list);
-		}
-		count_sol = count_sols(g_lemin->solution);
-		reset_minw_prev(list);
+		count_sol = dop_alg(list);
 	}
-	reset_graph(list);
-	reset_minw_prev(list);
+	reset_all(list);
 	return (1);
 }
