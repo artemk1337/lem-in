@@ -10,25 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "lemin.h"
 
-
-/* Ищет последнюю комнату */
 t_room	*find_last_room(t_tmp *list)
 {
 	t_tmp	*curr;
 
 	curr = list;
-	while(curr->next)
+	while (curr->next)
 		curr = curr->next;
 	return (curr->room);
 }
-
-/* <========================================> */
-/* <========== Количество решений ==========> */
-/* <================ Готово ================> */
-
 
 int		count_sols(t_solution *sol)
 {
@@ -42,7 +34,6 @@ int		count_sols(t_solution *sol)
 	}
 	return (counter);
 }
-
 
 void	show_input(void)
 {
@@ -67,7 +58,8 @@ void	show_max_lines(void)
 	i = 0;
 	while (i < g_lemin->vector->curr_size)
 	{
-		if (ft_strstr(&(g_lemin->vector->vec[i]), "#Here is the number of lines required"))
+		if (ft_strstr(&(g_lemin->vector->vec[i]),
+			"#Here is the number of lines required"))
 		{
 			ft_putstr("\n");
 			ft_putstr(&(g_lemin->vector->vec[i]));

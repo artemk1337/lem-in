@@ -12,10 +12,19 @@
 
 #include "lemin.h"
 
-/* <===============================> */
-/* <========== Суурбалле ==========> */
-/* <============ Готово ===========> */
+void	dop_1_suurballe(t_room *curr, t_room *prev, t_next *neigh_neigh)
+{
+	t_next	*neigh;
 
+	neigh = curr->next;
+	while (neigh && neigh->room != prev)
+		neigh = neigh->next;
+	neigh->weight = -1;
+	neigh_neigh = neigh->room->next;
+	while (neigh_neigh && neigh_neigh->room != curr)
+		neigh_neigh = neigh_neigh->next;
+	neigh_neigh->toggle = 0;
+}
 
 int		suurballe(t_tmp *list)
 {
@@ -32,14 +41,7 @@ int		suurballe(t_tmp *list)
 		return (0);
 	while (prev)
 	{
-		neigh = curr->next;
-		while (neigh && neigh->room != prev)
-			neigh = neigh->next;
-		neigh->weight = -1;
-		neigh_neigh = neigh->room->next;
-		while (neigh_neigh && neigh_neigh->room != curr)
-			neigh_neigh = neigh_neigh->next;
-		neigh_neigh->toggle = 0;
+		dop_1_suurballe(curr, prev, neigh_neigh);
 		if (curr == g_lemin->start)
 			break ;
 		if (curr != g_lemin->finish)
@@ -49,4 +51,3 @@ int		suurballe(t_tmp *list)
 	}
 	return (len_way);
 }
-

@@ -97,8 +97,8 @@ int			alg_4(int print)
 		}
 		if (print)
 		{
-			ft_putstr("\t| step - ");
-			ft_putnbr(step);
+			//ft_putstr("\t| step - ");
+			//ft_putnbr(step);
 			ft_putstr("\n");
 		}
 		step++;
