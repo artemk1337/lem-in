@@ -10,43 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-/* <======================================> */
-/* <========== Разбиение комнат ==========> */
-/* <============== Готово ================> */
-
-
 #include "lemin.h"
 
-t_room	*split_room(t_room *curr, t_tmp *list)
+void	dop_1_split_room(t_next *neigh, t_next *neigh_neigh,
+	t_room *in, t_room *out)
 {
-	t_next	*neigh;
-	t_next	*neigh_neigh;
-	t_room	*in;
-	t_room	*out;
-
-	if (curr->in || curr->out)
-	{
-		// НИКОГДА НЕ ДОЛЖНО СРАБАТЫВАТЬ
-		ft_putstr("ERROR 1\n");
-		exit(1);
-	}
-	// g_lemin->finish->was_here = 1;
-	// Создал комнату
-	list = init_tmp(list, 1, curr->name); // ft_strjoin(curr->name, "123")
-	in = find_last_room(list);
-	out = curr;
-	out->in = in;
-	in->out = out;
-
-	// Перенес соседей
-	// Перекинул связи с out на in кроме той, по которой шли
-	neigh = out->next;
-	// Проблема в этом while в случае прохода по последнему соседу.
-	// Непонятно, почему. Предположительно, ошибка при считывании.
 	while (neigh)
 	{
-
 		if (!neigh->room->was_here)
 		{
 			if (neigh->room->out)
@@ -59,10 +29,11 @@ t_room	*split_room(t_room *curr, t_tmp *list)
 		}
 		neigh = neigh->next;
 	}
+}
 
-	// Создал соседа для in
-	if (!(neigh = ft_memalloc(sizeof(t_next))))
-		exit(1);
+void	dop_2_split_room(t_next *neigh, t_next *neigh_neigh,
+	t_room *in, t_room *out)
+{
 	g_lemin->edge++;
 	neigh->weight = -1;
 	neigh->toggle = 1;
@@ -71,9 +42,11 @@ t_room	*split_room(t_room *curr, t_tmp *list)
 	neigh->room = out->prev;
 	in->next = neigh;
 	in->prev = out->prev;
+}
 
- 	// Перекинул связь на in
-	neigh = out->next;
+void	dop_3_split_room(t_next *neigh, t_next *neigh_neigh,
+	t_room *in, t_room *out)
+{
 	while (neigh)
 	{
 		if (neigh->room == out->prev)
@@ -83,8 +56,30 @@ t_room	*split_room(t_room *curr, t_tmp *list)
 		}
 		neigh = neigh->next;
 	}
-	out->prev = in;
+}
 
+t_room	*split_room(t_room *curr, t_tmp *list)
+{
+	t_next	*neigh;
+	t_next	*neigh_neigh;
+	t_room	*in;
+	t_room	*out;
+
+	if (curr->in || curr->out)
+		exit(1);
+	list = init_tmp(list, 1, curr->name);
+	in = find_last_room(list);
+	out = curr;
+	out->in = in;
+	in->out = out;
+	neigh = out->next;
+	dop_1_split_room(neigh, neigh_neigh, in, out);
+	if (!(neigh = ft_memalloc(sizeof(t_next))))
+		exit(1);
+	dop_2_split_room(neigh, neigh_neigh, in, out);
+	neigh = out->next;
+	dop_3_split_room(neigh, neigh_neigh, in, out);
+	out->prev = in;
 	in->was_here = 1;
 	out->was_here = 1;
 	return (in->prev);
