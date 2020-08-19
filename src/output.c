@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "lemin.h"
 
 int			check_ant(t_solution *sol, int len_way)
@@ -19,7 +17,6 @@ int			check_ant(t_solution *sol, int len_way)
 	t_solution		*sol_tmp;
 	int				i;
 	unsigned long	delta;
-
 
 	sol_tmp = g_lemin->solution;
 	delta = 0;
@@ -73,6 +70,12 @@ static void	move_ant(t_solution *sol, int len_way, int print)
 	}
 }
 
+/*
+** ft_putstr("\t| step - ");
+** ft_putnbr(step);
+** ft_putstr("\n");
+*/
+
 int			alg_4(int print)
 {
 	t_solution	*sol;
@@ -81,7 +84,6 @@ int			alg_4(int print)
 
 	g_lemin->start->ant = g_lemin->count;
 	g_lemin->finish->ant = 0;
-	//ft_putstr("\tSolution:\n\n");
 	step = 1;
 	while (g_lemin->finish->ant != g_lemin->count)
 	{
@@ -94,11 +96,7 @@ int			alg_4(int print)
 			i++;
 		}
 		if (print)
-		{
-			ft_putstr("\t| step - ");
-			ft_putnbr(step);
 			ft_putstr("\n");
-		}
 		step++;
 	}
 	return (step - 1);

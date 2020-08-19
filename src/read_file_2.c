@@ -12,7 +12,19 @@
 
 #include "lemin.h"
 
-void	put_way_dop(t_tmp *tmp, t_tmp *tmp_2, char *s2, int weight)
+void		dop_1_put_way_dop(t_next *neigh, int weight, t_tmp *tmp_2, char *s2)
+{
+	neigh->weight = weight;
+	neigh->toggle = 1;
+	neigh->global_toggle = 1;
+	neigh->next = NULL;
+	while (tmp_2 && ft_strcmp(tmp_2->room->name, s2))
+		tmp_2 = tmp_2->next;
+	if (tmp_2)
+		neigh->room = tmp_2->room;
+}
+
+void		put_way_dop(t_tmp *tmp, t_tmp *tmp_2, char *s2, int weight)
 {
 	t_next *neigh;
 
@@ -28,24 +40,17 @@ void	put_way_dop(t_tmp *tmp, t_tmp *tmp_2, char *s2, int weight)
 		while (neigh->next)
 		{
 			if (!ft_strcmp(neigh->room->name, s2))
-			    return ;
+				return ;
 			neigh = neigh->next;
 		}
 		if (!(neigh->next = ft_memalloc(sizeof(t_next))))
 			error_exit();
 		neigh = neigh->next;
 	}
-	neigh->weight = weight;
-	neigh->toggle = 1;
-	neigh->global_toggle = 1;
-	neigh->next = NULL;
-	while (tmp_2 && ft_strcmp(tmp_2->room->name, s2))
-		tmp_2 = tmp_2->next;
-	if (tmp_2)
-		neigh->room = tmp_2->room;
+	dop_1_put_way_dop(neigh, weight, tmp_2, s2);
 }
 
-void	put_way(char *s, t_tmp *tmp)
+void		put_way(char *s, t_tmp *tmp)
 {
 	t_tmp	*start;
 	int		i;

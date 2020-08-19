@@ -33,7 +33,7 @@ int		main(void)
 		error_exit();
 	show_input();
 	alg_4(1);
-	show_max_lines();
+	// show_max_lines();  // Потом удалим окончательно
 	clean_tmp(&tmp);
 	return (0);
 }
