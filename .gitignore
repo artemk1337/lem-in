@@ -8,6 +8,6 @@
 .idea*
 [cC][mM]*
 *.dSYM
-lem-in
+../lem-in
 test_*
 *.exe*
