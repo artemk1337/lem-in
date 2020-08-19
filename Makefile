@@ -17,6 +17,7 @@ SRCS_NAME = main.c\
 			hash.c\
 			error_handler.c\
 			validation.c\
+			validation_dop.c\
 			_check.c\
 			clear.c\
 			save_solution.c\

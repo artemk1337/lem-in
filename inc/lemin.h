@@ -18,6 +18,7 @@
 # include <limits.h>
 
 # define STDIN 0
+# define ULLONG_MAX_STR "18446744073709551615"
 
 typedef struct			s_next
 {
@@ -120,12 +121,17 @@ void					clean_tmp(t_tmp **tmp);
 void					reset_minw_prev(t_tmp *list);
 
 /*
-** Validation
+** validation
 */
 void					check_duplicate_nodes(t_room **rooms_array);
 void					check_edge(char *str);
 void					check_node(char *str);
 unsigned long int		check_ant_num(char *str);
+
+/*
+** validation_dop.c
+*/
+void					free_word_list(char ***words);
 
 /*
 ** Error handling
