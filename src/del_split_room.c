@@ -10,71 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-/* <======================================> */
-/* <========= Удаление разбиения =========> */
-/* <============== Готово ================> */
-
-
 #include "lemin.h"
 
-
-/* Удаляем раздвоение на всем графе, заново переносим связи и удаляем in-связь */
-void	reset_graph(t_tmp *list)
+void	dop_end(t_tmp *list)
 {
 	t_tmp	*curr;
-	t_tmp	*next;
-	t_room	*out;
 	t_next	*neigh;
-	t_next	*neigh_neigh;
 
-	// Ищу комнату-in 
-	curr = list;
-	while (curr && curr->next && !curr->next->room->out)
-		curr = curr->next;
-	// Указатель на NULL
-	next = curr->next;
-	curr->next = NULL;
-	// Зачищаю список и переношу связи
-	curr = next;
-	while (curr)
-	{
-		//ft_putstr("\nDELETED: ");
-		//ft_putstr(curr->room->name);
-		//ft_putchar('\n');
-
-		next = curr->next; // Можно удалить
-		out = curr->room->out;
-		// Переношу связь с in на предыдущую комнату
-		neigh_neigh = out->next;
-		while (neigh_neigh->room != curr->room)
-			neigh_neigh = neigh_neigh->next;
-		neigh_neigh->room = curr->room->next->room;
-		neigh_neigh->global_toggle = curr->room->next->global_toggle;
-		// Переношу связи на out
-		neigh = out->next;
-		while (neigh)
-		{
-			if (neigh->room->out)
-				neigh_neigh = neigh->room->out->next;
-			else
-				neigh_neigh = neigh->room->next;
-			while (neigh_neigh && neigh_neigh->room != curr->room)
-				neigh_neigh = neigh_neigh->next;
-			if (neigh_neigh)
-				neigh_neigh->room = out;
-			neigh = neigh->next;
-		}
-		// Удаляю комнату и ее связь
-		free(curr->room->next);
-		free(curr->room->name);
-		free(curr->room);
-		free(curr);
-		g_lemin->edge--;
-		curr = next;
-	}
-
-	// Переключаю toggle и восстанавливаю веса связей
 	curr = list;
 	while (curr)
 	{
@@ -91,3 +33,67 @@ void	reset_graph(t_tmp *list)
 	}
 }
 
+void	free_(t_tmp *curr)
+{
+	free(curr->room->next);
+	free(curr->room->name);
+	free(curr->room);
+	free(curr);
+}
+
+void	dop_1(t_room *out, t_tmp *curr)
+{
+	t_next	*neigh_neigh;
+	t_next	*neigh;
+
+	neigh = out->next;
+	while (neigh)
+	{
+		if (neigh->room->out)
+			neigh_neigh = neigh->room->out->next;
+		else
+			neigh_neigh = neigh->room->next;
+		while (neigh_neigh && neigh_neigh->room != curr->room)
+			neigh_neigh = neigh_neigh->next;
+		if (neigh_neigh)
+			neigh_neigh->room = out;
+		neigh = neigh->next;
+	}
+}
+
+t_tmp	*dop_2(t_tmp *next, t_tmp *curr)
+{
+	next = curr->next;
+	curr->next = NULL;
+	curr = next;
+	return (curr);
+}
+
+void	reset_graph(t_tmp *list)
+{
+	t_tmp	*curr;
+	t_tmp	*next;
+	t_room	*out;
+	t_next	*neigh;
+	t_next	*neigh_neigh;
+
+	curr = list;
+	while (curr && curr->next && !curr->next->room->out)
+		curr = curr->next;
+	curr = dop_2(next, curr);
+	while (curr)
+	{
+		next = curr->next;
+		out = curr->room->out;
+		neigh_neigh = out->next;
+		while (neigh_neigh->room != curr->room)
+			neigh_neigh = neigh_neigh->next;
+		neigh_neigh->room = curr->room->next->room;
+		neigh_neigh->global_toggle = curr->room->next->global_toggle;
+		dop_1(out, curr);
+		free_(curr);
+		g_lemin->edge--;
+		curr = next;
+	}
+	dop_end(list);
+}

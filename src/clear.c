@@ -24,7 +24,6 @@ void			clean_tmp(t_tmp **tmp)
 	}
 }
 
-/* Сбрасывает предыдущую комнату и восстанавливает веса */
 void			reset_minw_prev(t_tmp *list)
 {
 	t_tmp *tmp;
@@ -33,8 +32,8 @@ void			reset_minw_prev(t_tmp *list)
 	while (tmp)
 	{
 		tmp->room->prev = NULL;
-        if (tmp->room != g_lemin->start)
-		    tmp->room->min_w = INT_MAX / 2;
+		if (tmp->room != g_lemin->start)
+			tmp->room->min_w = INT_MAX / 2;
 		tmp->room->was_here = 0;
 		tmp->room->ant = 0;
 		tmp->room->number_ant = 0;

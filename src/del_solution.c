@@ -12,14 +12,9 @@
 
 #include "lemin.h"
 
-/* <======================================> */
-/* <========== Удаление решения ==========> */
-/* <=============== Готово ===============> */
-
-
 void	del_sol(t_solution **solution)
 {
-	t_solution *temp;
+	t_solution	*temp;
 
 	while (*solution)
 	{

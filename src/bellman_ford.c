@@ -12,12 +12,6 @@
 
 #include "lemin.h"
 
-
-/* <==================================> */
-/* <========== Беллман-Форд ==========> */
-/* <============= Готово =============> */
-
-
 int		bellman_ford(t_tmp *start, int counter)
 {
 	t_tmp	*curr;
@@ -27,20 +21,13 @@ int		bellman_ford(t_tmp *start, int counter)
 	curr = start;
 	while (curr)
 	{
-		//ft_putstr("Room: ");
-		//ft_putstr(curr->room->name);
-		//ft_putstr("\n");
-
 		curr_n = curr->room->next;
 		while (curr_n)
 		{
-			//ft_putstr("Neigh: ");
-			//ft_putstr(curr_n->room->name);
-			//ft_putstr("\n");
-
 			if (curr_n->toggle && curr_n->global_toggle
 				&& curr->room->min_w + curr_n->weight < curr_n->room->min_w
-				&& curr->room != g_lemin->finish &&  curr->room->min_w != (INT_MAX / 2))
+				&& curr->room != g_lemin->finish &&
+				curr->room->min_w != (INT_MAX / 2))
 			{
 				counter++;
 				curr_n->room->prev = curr->room;
