@@ -25,19 +25,17 @@ void	dop_main(int tmp_, int ways, t_tmp *tmp)
 		if (max_steps == -1)
 		{
 			max_steps = steps;
-			g_lemin->prev_solution = g_lemin->solution;
-			g_lemin->solution = NULL;
 		}
-		else if (max_steps > steps)
+		else if (max_steps >= steps)
 		{
 			if (g_lemin->prev_solution)
 				del_sol(&g_lemin->prev_solution);
 			max_steps = steps;
-			g_lemin->prev_solution = g_lemin->solution;
-			g_lemin->solution = NULL;
 		}
 		else if (max_steps < steps)
 			break ;
+		g_lemin->prev_solution = g_lemin->solution;
+		g_lemin->solution = NULL;
 		ways++;
 	}
 }
