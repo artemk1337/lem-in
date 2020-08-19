@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-int		len_sol(t_solution *solution)
+int			len_sol(t_solution *solution)
 {
 	t_solution	*begin;
 	int			i;
@@ -27,7 +27,30 @@ int		len_sol(t_solution *solution)
 	return (i);
 }
 
-void	sort_solutions(t_solution **solution)
+t_solution	*dop_1_sot_sol(t_solution *curr, t_solution *prev,
+	t_solution *start)
+{
+	if (curr->path_len > curr->next->path_len)
+	{
+		if (!prev)
+		{
+			start = curr->next;
+			curr->next = start->next;
+			start->next = curr;
+		}
+		else
+		{
+			prev->next = curr->next;
+			curr->next = prev->next->next;
+			prev->next->next = curr;
+		}
+	}
+	prev = curr;
+	curr = curr->next;
+	return (curr);
+}
+
+void		sort_solutions(t_solution **solution)
 {
 	t_solution	*prev;
 	t_solution	*curr;
@@ -47,23 +70,7 @@ void	sort_solutions(t_solution **solution)
 		curr = start;
 		while (curr && curr->next)
 		{
-			if (curr->path_len > curr->next->path_len)
-			{
-				if (!prev)
-				{
-					start = curr->next;
-					curr->next = start->next;
-					start->next = curr;
-				}
-				else
-				{
-					prev->next = curr->next;
-					curr->next = prev->next->next;
-					prev->next->next = curr;
-				}
-			}
-			prev = curr;
-			curr = curr->next;
+			curr = dop_1_sot_sol(curr, prev, start);
 		}
 		i++;
 	}
