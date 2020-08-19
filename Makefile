@@ -20,10 +20,19 @@ SRCS_NAME = main.c\
 			_check.c\
 			clear.c\
 			save_solution.c\
-			solutions_copy.c\
-            check_solutions.c\
+			del_solution.c\
 			output.c\
 			sort_solutions.c\
+			split_room.c\
+			del_split_room.c\
+			utils1.c\
+			len_way_and_check_crossing.c\
+			bellman_ford.c\
+			suurballe.c\
+			alg_suurballe.c\
+			dop_main.c\
+			read_file_1.c\
+			read_file_2.c\
 
 
 

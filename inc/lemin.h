@@ -17,6 +17,8 @@
 # include <libft.h>
 # include <limits.h>
 
+# define STDIN 0
+
 typedef struct			s_next
 {
 	struct s_room		*room;
@@ -40,7 +42,7 @@ typedef struct			s_room
 	struct s_room		**path;
 	int					idx;
 
-	// For ant
+	/* For ant */
 	unsigned long		ant;
 	unsigned long		number_ant;
 }						t_room;
@@ -98,13 +100,24 @@ void					test_way(void);
 /*
 ** save_solution.c
 */
-void					reset_minw_prev(t_tmp *list);
+t_room					**malloc_array_rooms(int len_way);
+void					save_way(int len_way);
+
+/*
+** del_solution.c
+*/
+void					del_sol(t_solution **solution);
+
+/*
+** len_way_and_check_crossing.c
+*/
+int						count_len_way(void);
 
 /*
 ** clear.c
 */
-t_solution				*clean_sol(void);
 void					clean_tmp(t_tmp **tmp);
+void					reset_minw_prev(t_tmp *list);
 
 /*
 ** Validation
@@ -135,5 +148,59 @@ t_lemin					*g_lemin;
 int						check_solutions(t_solution *prev_solution,
 										t_solution *current_solution);
 void					sort_solutions(t_solution **solution);
+
+/*
+** split_room.c
+*/
+t_room					*split_room(t_room *curr, t_tmp *list);
+
+/*
+** del_split_room.c
+*/
+void					reset_graph(t_tmp *list);
+
+/*
+** utils1.c
+*/
+t_room					*find_last_room(t_tmp *list);
+int						count_sols(t_solution *sol);
+void					show_input(void);
+void					show_max_lines(void);
+
+
+/*
+** bellman_ford.c
+*/
+int						bellman_ford(t_tmp *start, int counter);
+
+/*
+** suuballe.c
+*/
+int						suurballe(t_tmp *list);
+
+/*
+** alg_suurballe.c
+*/
+int						algorithm(t_tmp *list, int max_ways);
+
+/*
+** dop_main.c
+*/
+void					dop_main(int tmp_, int ways, t_tmp *tmp);
+
+
+/*
+** read_file_1.c
+*/
+t_tmp					*create_struct(void);
+void					check_ants(char *line);
+t_tmp					*create_struct_prefix(char **line, t_tmp *tmp);
+
+/*
+** read_file_1.c
+*/
+t_tmp					*create_struct_(char *line, t_tmp *tmp);
+void					put_way(char *s, t_tmp *tmp);
+void					put_way_dop(t_tmp *tmp, t_tmp *tmp_2, char *s2, int weight);
 
 #endif
