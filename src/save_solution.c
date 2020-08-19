@@ -12,12 +12,6 @@
 
 #include "lemin.h"
 
-
-/* <=====================================> */
-/* <========== Сохранение пути ==========> */
-/* <=============== Готово ==============> */
-
-
 t_room	**malloc_array_rooms(int len_way)
 {
 	t_room	**arr;
@@ -28,6 +22,27 @@ t_room	**malloc_array_rooms(int len_way)
 	return (arr);
 }
 
+void	dop_1_save_way(t_solution *solution, t_room **arr_rooms, int len_way)
+{
+	if (!(g_lemin->solution = ft_memalloc(sizeof(t_solution))))
+		exit(1);
+	solution = g_lemin->solution;
+	solution->arr = arr_rooms;
+	solution->path_len = len_way;
+	solution->next = NULL;
+}
+
+void	dop_2_save_way(t_solution *solution, t_room **arr_rooms, int len_way)
+{
+	while (solution->next)
+		solution = solution->next;
+	if (!(solution->next = ft_memalloc(sizeof(t_solution))))
+		exit(1);
+	solution = solution->next;
+	solution->arr = arr_rooms;
+	solution->path_len = len_way;
+	solution->next = NULL;
+}
 
 void	save_way(int len_way)
 {
@@ -46,30 +61,9 @@ void	save_way(int len_way)
 		curr_r = curr_r->prev;
 	}
 	arr_rooms[--counter_len] = curr_r;
-
 	solution = g_lemin->solution;
 	if (!solution)
-	{
-		if (!(g_lemin->solution = ft_memalloc(sizeof(t_solution))))
-			exit(1);
-		solution = g_lemin->solution;
-
-		solution->arr = arr_rooms;
-		solution->path_len = len_way;
-		solution->next = NULL;
-	}
+		dop_1_save_way(solution, arr_rooms, len_way);
 	else
-	{
-		while (solution->next)
-			solution = solution->next;
-		if (!(solution->next = ft_memalloc(sizeof(t_solution))))
-			exit(1);
-		solution = solution->next;
-
-		solution->arr = arr_rooms;
-		solution->path_len = len_way;
-		solution->next = NULL;
-	}
+		dop_2_save_way(solution, arr_rooms, len_way);
 }
-
-
