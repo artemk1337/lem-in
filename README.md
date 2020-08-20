@@ -4,7 +4,7 @@
 
 1. Download:
     ```bash
-    git clone https://github.com/artemk1337/lem-in
+    git clone https://github.com/artemk1337/lem-in.git
     ```
 1. Install:
     ```bash
