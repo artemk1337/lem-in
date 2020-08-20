@@ -3,15 +3,16 @@
 ## Quick start
 
 1. Download:
-  ```bash
-  git clone https://github.com/artemk1337/lem-in
-  ```
+    ```bash
+    git clone https://github.com/artemk1337/lem-in
+    ```
 1. Install:
-  ```bash
-  make
-  ```
+    ```bash
+    make
+    ```
 1. Run:
-  ```bash
-  ./generator <flag> | ./lem-in
-  ```
-See ```./generator --help``` for usage flags.
+    ```bash
+    ./generator <flag> | ./lem-in
+    ```
+
+See `./generator --help` for usage flags.
