@@ -16,4 +16,4 @@ make
 ./generator <flag> | ./lem-in
 ```
 
-```./generator --help``` -- show all flags
+```./generator --help``` - show all flags
