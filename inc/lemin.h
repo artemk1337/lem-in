@@ -74,6 +74,7 @@ typedef struct			s_lemin
 	t_room				**arr;
 	t_solution			*solution;
 	t_solution			*prev_solution;
+	int					v;
 
 	t_tmp				*sup_list;
 }						t_lemin;
@@ -87,7 +88,7 @@ t_room					**create_array(t_tmp **list_begin);
 /*
 ** init.c
 */
-t_lemin					*init_lemin(void);
+t_lemin					*init_lemin(int argc, char **argv);
 t_room					*init_room(char *s);
 t_tmp					*init_tmp(t_tmp *tmp, int a, char *s);
 

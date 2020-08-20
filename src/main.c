@@ -12,13 +12,13 @@
 
 #include "lemin.h"
 
-int		main(void)
+int		main(int argc, char **argv)
 {
 	t_tmp	*tmp;
 	int		tmp_;
 	int		ways;
 
-	g_lemin = init_lemin();
+	g_lemin = init_lemin(argc, argv);
 	tmp = create_struct();
 	g_lemin->arr = create_array(&tmp);
 	check_duplicate_nodes(g_lemin->arr);
@@ -33,7 +33,8 @@ int		main(void)
 		error_exit();
 	show_input();
 	alg_4(1);
-	//show_max_lines();  // Потом удалим окончательно
+	if (g_lemin->v == 1)
+		show_max_lines();
 	clean_tmp(&tmp);
 	return (0);
 }

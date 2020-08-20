@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-t_lemin	*init_lemin(void)
+t_lemin	*init_lemin(int argc, char **argv)
 {
 	t_lemin	*lemin;
 
@@ -20,6 +20,9 @@ t_lemin	*init_lemin(void)
 		exit(1);
 	if (!(lemin->vector = ft_create_vec(10)))
 		exit(1);
+	lemin->v = 0;
+	if (argc == 2 && (argv[1][0] == '-' && argv[1][1] == 'v' && !argv[1][2]))
+		lemin->v = 1;
 	lemin->count = 0;
     lemin->arr = NULL;
     lemin->start = NULL;

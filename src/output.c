@@ -79,7 +79,6 @@ static void	move_ant(t_solution *sol, int len_way, int print)
 int			alg_4(int print)
 {
 	t_solution	*sol;
-	int			i;
 	int			step;
 
 	g_lemin->start->ant = g_lemin->count;
@@ -87,20 +86,19 @@ int			alg_4(int print)
 	step = 1;
 	while (g_lemin->finish->ant != g_lemin->count)
 	{
-		i = 0;
 		sol = g_lemin->solution;
 		while (sol)
 		{
 			move_ant(sol, sol->path_len, print);
 			sol = sol->next;
-			i++;
+		}
+		if (print && g_lemin->v)
+		{
+			ft_putstr("\t| step - ");
+			ft_putnbr(step);
 		}
 		if (print)
-		{
-			//ft_putstr("\t| step - ");
-			//ft_putnbr(step);
 			ft_putstr("\n");
-		}
 		step++;
 	}
 	return (step - 1);
