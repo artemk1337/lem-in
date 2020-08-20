@@ -1,19 +1,17 @@
 # lem-in
 
-# Quick start
+## Quick start
+
 1. Download:
-  ```
+  ```bash
   git clone https://github.com/artemk1337/lem-in
   ```
-
-2. Install:
-  ```
+1. Install:
+  ```bash
   make
   ```
-
-3. Run:
-  ```
+1. Run:
+  ```bash
   ./generator <flag> | ./lem-in
   ```
-
 See ```./generator --help``` for usage flags.
