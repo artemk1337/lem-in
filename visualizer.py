@@ -110,13 +110,17 @@ def place_rooms(graph, img_object, screen):
 
 def load_files(heroes, rooms):
     for hero in os.listdir(heroes_path):
-        hero_img = pygame.image.load(heroes_path + hero)
-        hero_img.set_colorkey(WHITE)
-        heroes[hero.split('.')[0]] = hero_img
+        if hero.endswith('.bmp'):
+            print(hero)
+            hero_img = pygame.image.load(heroes_path + hero)
+            hero_img.set_colorkey(WHITE)
+            heroes[hero.split('.')[0]] = hero_img
     for room in os.listdir(rooms_path):
-        room_img = pygame.image.load(rooms_path + room)
-        room_img.set_colorkey(WHITE)
-        rooms[room.split('.')[0]] = room_img
+        if room.endswith('.bmp'):
+            print(room)
+            room_img = pygame.image.load(rooms_path + room)
+            room_img.set_colorkey(WHITE)
+            rooms[room.split('.')[0]] = room_img
 
 
 def init_view(graph, room):
@@ -197,8 +201,8 @@ def main():
     rooms = dict()
     graph = Graph()
     load_files(heroes, rooms)
-    room = rooms['42_logo']
-    hero = heroes['hero1']
+    room = rooms['death_star']
+    hero = heroes['hero3']
     screen = init_view(graph, room)
     launch_ants(graph, screen, hero, room)
 
@@ -206,5 +210,3 @@ def main():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/

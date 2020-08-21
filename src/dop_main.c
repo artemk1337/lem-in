@@ -23,9 +23,7 @@ void	dop_main(int tmp_, int ways, t_tmp *tmp)
 		tmp_ = algorithm(tmp, ways);
 		steps = alg_4(0);
 		if (max_steps == -1)
-		{
 			max_steps = steps;
-		}
 		else if (max_steps >= steps)
 		{
 			if (g_lemin->prev_solution)

@@ -43,7 +43,6 @@ typedef struct			s_room
 	struct s_room		**path;
 	int					idx;
 
-	/* For ant */
 	unsigned long		ant;
 	unsigned long		number_ant;
 }						t_room;
@@ -174,7 +173,6 @@ int						count_sols(t_solution *sol);
 void					show_input(void);
 void					show_max_lines(void);
 
-
 /*
 ** bellman_ford.c
 */
@@ -195,7 +193,6 @@ int						algorithm(t_tmp *list, int max_ways);
 */
 void					dop_main(int tmp_, int ways, t_tmp *tmp);
 
-
 /*
 ** read_file_1.c
 */
@@ -208,6 +205,7 @@ t_tmp					*create_struct_prefix(char **line, t_tmp *tmp);
 */
 t_tmp					*create_struct_(char *line, t_tmp *tmp);
 void					put_way(char *s, t_tmp *tmp);
-void					put_way_dop(t_tmp *tmp, t_tmp *tmp_2, char *s2, int weight);
+void					put_way_dop(t_tmp *tmp, t_tmp *tmp_2,
+						char *s2, int weight);
 
 #endif

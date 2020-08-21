@@ -66,7 +66,7 @@ t_tmp	*create_struct(void)
 			tmp = create_struct_prefix(&line, tmp);
 		ft_strdel(&line);
 	}
-	if (!(tmp))
+	if (!(tmp) || !g_lemin->edge)
 		error_exit();
 	return (tmp);
 }

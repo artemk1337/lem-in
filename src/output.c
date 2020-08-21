@@ -84,7 +84,7 @@ int			alg_4(int print)
 	g_lemin->start->ant = g_lemin->count;
 	g_lemin->finish->ant = 0;
 	step = 1;
-	while (g_lemin->finish->ant != g_lemin->count)
+	while (g_lemin->solution && g_lemin->finish->ant != g_lemin->count)
 	{
 		sol = g_lemin->solution;
 		while (sol)
