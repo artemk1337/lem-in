@@ -24,8 +24,8 @@ t_lemin	*init_lemin(int argc, char **argv)
 	if (argc == 2 && (argv[1][0] == '-' && argv[1][1] == 'v' && !argv[1][2]))
 		lemin->v = 1;
 	lemin->count = 0;
-    lemin->arr = NULL;
-    lemin->start = NULL;
+	lemin->arr = NULL;
+	lemin->start = NULL;
 	lemin->finish = NULL;
 	lemin->rooms = 0;
 	lemin->solution = NULL;
@@ -54,6 +54,15 @@ t_room	*init_room(char *s)
 	return (room);
 }
 
+void	dop_init_tmp(t_tmp *tmp, char *s, int a)
+{
+	tmp->room = init_room(s);
+	if (a == 0 && !(tmp->room->min_w = 0))
+		(!g_lemin->start) ? g_lemin->start = tmp->room : error_exit();
+	else if (a == -1)
+		(!g_lemin->finish) ? g_lemin->finish = tmp->room : error_exit();
+}
+
 t_tmp	*init_tmp(t_tmp *tmp, int a, char *s)
 {
 	t_tmp	*start;
@@ -78,10 +87,6 @@ t_tmp	*init_tmp(t_tmp *tmp, int a, char *s)
 	while (s[i] && s[i] != ' ')
 		i++;
 	s[i] = '\0';
-	tmp->room = init_room(s);
-	if (a == 0 && !(tmp->room->min_w = 0))
-		(!g_lemin->start) ? g_lemin->start = tmp->room : error_exit();
-	else if (a == -1)
-		(!g_lemin->finish) ? g_lemin->finish = tmp->room : error_exit();
+	dop_init_tmp(tmp, s, a);
 	return (start);
 }

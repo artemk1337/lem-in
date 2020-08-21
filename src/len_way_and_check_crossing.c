@@ -12,23 +12,16 @@
 
 #include "lemin.h"
 
-int		count_len_way(void)
+int		dop_count_len_way1(t_room *prev, t_room *curr, int *len, t_next *neigh)
 {
-	t_room	*curr;
-	t_room	*prev;
-	t_next	*neigh;
-	int		len;
-	int		cross_way;
+	int cross_way;
 
-	len = 1;
 	cross_way = 0;
-	curr = g_lemin->finish;
-	prev = curr->prev;
 	while (prev)
 	{
 		if (prev == g_lemin->start)
 			break ;
-		len++;
+		(*len)++;
 		if (curr->in && prev->out)
 		{
 			neigh = curr->next;
@@ -44,6 +37,22 @@ int		count_len_way(void)
 		curr = prev;
 		prev = curr->prev;
 	}
+	return (cross_way);
+}
+
+int		count_len_way(void)
+{
+	t_room	*curr;
+	t_room	*prev;
+	t_next	*neigh;
+	int		len;
+	int		cross_way;
+
+	len = 1;
+	cross_way = 0;
+	curr = g_lemin->finish;
+	prev = curr->prev;
+	cross_way = dop_count_len_way1(prev, curr, &len, neigh);
 	len++;
 	if (cross_way)
 		return (-1);
