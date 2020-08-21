@@ -197,8 +197,8 @@ def main():
     rooms = dict()
     graph = Graph()
     load_files(heroes, rooms)
-    room = rooms['death_star']
-    hero = heroes['hero2']
+    room = rooms['42_logo']
+    hero = heroes['hero1']
     screen = init_view(graph, room)
     launch_ants(graph, screen, hero, room)
 

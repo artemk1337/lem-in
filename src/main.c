@@ -12,6 +12,12 @@
 
 #include "lemin.h"
 
+static void free_hash_table(void)
+{
+	check_duplicate_nodes(g_lemin->arr);
+	free(g_lemin->arr);
+}
+
 int		main(int argc, char **argv)
 {
 	t_tmp	*tmp;
@@ -21,7 +27,7 @@ int		main(int argc, char **argv)
 	g_lemin = init_lemin(argc, argv);
 	tmp = create_struct();
 	g_lemin->arr = create_array(&tmp);
-	check_duplicate_nodes(g_lemin->arr);
+	free_hash_table();
 	ways = 1;
 	tmp_ = 1;
 	dop_main(tmp_, ways, tmp);
