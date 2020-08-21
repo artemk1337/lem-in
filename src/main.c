@@ -12,13 +12,13 @@
 
 #include "lemin.h"
 
-static void free_hash_table(void)
+static void	free_hash_table(void)
 {
 	check_duplicate_nodes(g_lemin->arr);
 	free(g_lemin->arr);
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_tmp	*tmp;
 	int		tmp_;
