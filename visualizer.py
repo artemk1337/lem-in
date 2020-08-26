@@ -3,6 +3,9 @@ from collections import defaultdict
 
 import numpy as np
 import pygame
+import cv2
+from tqdm import tqdm
+
 
 media_path = 'media/'
 heroes_path = media_path + 'heroes/'
@@ -18,9 +21,10 @@ PINK = (230, 50, 230)
 TRANSPARENT = (255, 0, 255)
 
 width, height = 800, 800
+fps = 25
 
 
-class Graph():
+class Graph:
     def __init__(self):
         self.start_point = None
         self.end_point = None
@@ -106,17 +110,18 @@ def place_rooms(graph, img_object, screen):
 
     for point in graph.points:
         screen.blit(img_object, graph.transform_point(graph.points[point]))
+        pass
 
 
 def load_files(heroes, rooms):
     for hero in os.listdir(heroes_path):
-        if hero.endswith('.bmp'):
+        if hero.endswith('.png'):
             print(hero)
             hero_img = pygame.image.load(heroes_path + hero)
             hero_img.set_colorkey(WHITE)
             heroes[hero.split('.')[0]] = hero_img
     for room in os.listdir(rooms_path):
-        if room.endswith('.bmp'):
+        if room.endswith('.png'):
             print(room)
             room_img = pygame.image.load(rooms_path + room)
             room_img.set_colorkey(WHITE)
@@ -124,8 +129,8 @@ def load_files(heroes, rooms):
 
 
 def init_view(graph, room):
-    pygame.init()
-    pygame.display.set_caption("lemin")
+    # pygame.init()
+    # pygame.display.set_caption("lemin")
     width_, height_ = width - 32, height - 32
     graph.scale = {
         'x': width_ / (graph.max['x'] - graph.min['x']) if (graph.max['x'] -
@@ -136,24 +141,25 @@ def init_view(graph, room):
                                                                  'y']) != 0 else 1,
     }
 
-    screen = pygame.display.set_mode((width, height))
+    # screen = pygame.display.set_mode((width, height))
+    screen = pygame.Surface((width,height))
 
-    screen.fill(WHITE)
+    # screen.fill(WHITE)
     place_rooms(graph, room, screen)
-    pygame.display.update()
+    # pygame.display.update()
     pygame.time.delay(500)
     return screen
 
 
 def points_dif(p1, p2):
-    print(p1, p2)
+    # print(p1, p2)
     return (p1[0] - p2[0], p1[1] - p2[1])
 
 
 def launch_ants(graph, screen, hero, room_img):
     line = input()
     ants = defaultdict(list)
-    fps = 60
+    writer = cv2.VideoWriter("output.mp4", cv2.VideoWriter_fourcc(*"MP4V"), fps, (width, height))
 
     while 1:
         ants_steps = dict()
@@ -175,10 +181,12 @@ def launch_ants(graph, screen, hero, room_img):
                               fps)
                 )
                 ants[ant].pop(0)
-        for frame in range(fps + 1):
+        for frame in tqdm(range(fps + 1)):
             screen.fill(WHITE)
             place_rooms(graph, room_img, screen)
+            # print(pygame.surfarray.array3d(screen))
             for ant in ants:
+                # cv2.waitKey(0)
                 if ants_steps.get(ant):
                     screen.blit(hero, np.add(
                         graph.transform_point(graph.points[ants[ant][0]]),
@@ -187,12 +195,17 @@ def launch_ants(graph, screen, hero, room_img):
                 else:
                     screen.blit(hero, graph.transform_point(
                         graph.points[ants[ant][0]]))
-            pygame.display.update()
-            pygame.time.delay(1000 // fps)
-
+            # print(type(pygame.surfarray.array3d(screen)))
+            writer.write(pygame.surfarray.array3d(screen))
+            # cv2.imshow('image', pygame.surfarray.array3d(screen))
+            # cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            # pygame.display.update()
+            # pygame.time.delay(1000 // fps)
         try:
             line = input()
         except Exception:
+            writer.release()
             return
 
 
@@ -201,8 +214,8 @@ def main():
     rooms = dict()
     graph = Graph()
     load_files(heroes, rooms)
-    room = rooms['death_star']
-    hero = heroes['hero3']
+    room = rooms['garbage']
+    hero = heroes['hero1']
     screen = init_view(graph, room)
     launch_ants(graph, screen, hero, room)
 
