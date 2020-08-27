@@ -133,7 +133,7 @@ def init_view(graph, room):
     # pygame.display.set_caption("lemin")
     width_, height_ = width - 32, height - 32
     graph.scale = {
-        'x': width_ / (graph.max['x'] - graph.min['x']) if (graph.max['x'] -
+        'x': width_ / (graph.max['x'] - graph.min['x']) if (graph.max['x'] -  
                                                             graph.min[
                                                                 'x']) != 0 else 1,
         'y': height_ / (graph.max['y'] - graph.min['y']) if (graph.max['y'] -
@@ -212,7 +212,10 @@ def launch_ants(graph, screen, hero, room_img):
 def main():
     heroes = dict()
     rooms = dict()
+    # while 1:
+    #     pass
     graph = Graph()
+    
     load_files(heroes, rooms)
     room = rooms['garbage']
     hero = heroes['hero1']
