@@ -18,7 +18,7 @@ SRCS_NAME = main.c\
 			error_handler.c\
 			validation.c\
 			validation_dop.c\
-			_check.c\
+			check.c\
 			clear.c\
 			save_solution.c\
 			del_solution.c\

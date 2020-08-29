@@ -15,7 +15,7 @@
 void	dop_1_split_room(t_next *neigh, t_next *neigh_neigh,
 	t_room *in, t_room *out)
 {
-	while (neigh )
+	while (neigh)
 	{
 		if (!neigh->room->was_here)
 		{
@@ -27,7 +27,7 @@ void	dop_1_split_room(t_next *neigh, t_next *neigh_neigh,
 				neigh_neigh = neigh_neigh->next;
 			neigh_neigh->room = in;
 		}
-		neigh = neigh->next; 
+		neigh = neigh->next;
 	}
 }
 
