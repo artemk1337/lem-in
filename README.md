@@ -1,4 +1,4 @@
-# lem-in
+# Lem-in
 
 ## Quick start
 
