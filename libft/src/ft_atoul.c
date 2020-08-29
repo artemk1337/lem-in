@@ -22,7 +22,7 @@ unsigned long	ft_atoul(const char *str)
 	while (ft_isspace(str[i]))
 		i++;
 	if (str[i] == '+' && ((str[i + 1] - '0' < 10)
-							   && (str[i + 1] - '0' >= 0)))
+		&& (str[i + 1] - '0' >= 0)))
 		i++;
 	while ((str[i] - '0' < 10) && (str[i] - '0' >= 0))
 	{

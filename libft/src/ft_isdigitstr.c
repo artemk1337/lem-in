@@ -21,5 +21,4 @@ int	ft_isdigitstr(char *str)
 		if (!ft_isdigit(str[i]))
 			return (0);
 	return (1);
-
 }

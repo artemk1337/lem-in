@@ -23,7 +23,14 @@ void				check_node(char *str)
 {
 	char	**words;
 	int		i;
+	int		spaces;
 
+	i = -1;
+	spaces = 0;
+	while (str[++i])
+		spaces += 1 ? str[i] == ' ' : 0;
+	if (spaces != 2)
+		error_exit();
 	i = -1;
 	words = ft_strsplit(str, ' ');
 	while (words[++i])
