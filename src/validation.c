@@ -14,9 +14,14 @@
 
 unsigned long int	check_ant_num(char *str)
 {
+	int ant_num;
+
 	if ((ft_strlen(str) > 19) || !ft_isdigitstr(str))
 		error_exit();
-	return (ft_atoul(str));
+	ant_num = ft_atoul(str);
+	if (ant_num <= 0)
+		error_exit();
+	return (ant_num);
 }
 
 void				check_node(char *str)
