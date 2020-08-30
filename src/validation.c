@@ -16,7 +16,7 @@ unsigned long int	check_ant_num(char *str)
 {
 	int ant_num;
 
-	if ((ft_strlen(str) > 19) || !ft_isdigitstr(str))
+	if ((ft_strlen(str) > 19) || !ft_isdigitstr(str) || ft_strlen(str) == 0)
 		error_exit();
 	ant_num = ft_atoul(str);
 	if (ant_num <= 0)
