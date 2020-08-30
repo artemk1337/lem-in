@@ -6,13 +6,17 @@
     ```bash
     git clone https://github.com/artemk1337/lem-in.git
     ```
-1. Install:
+2. Install:
     ```bash
     make
     ```
-1. Run:
+3. Run:
     ```bash
     ./generator <flag> | ./lem-in
+	```
+	or
+	```bash
+	./generator <flag> | ./lem-in -v
     ```
 
 See `./generator --help` for usage flags.
