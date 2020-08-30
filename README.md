@@ -14,9 +14,12 @@
     ```bash
     ./generator <flag> | ./lem-in
 	```
-	or
+	or  
 	```bash
 	./generator <flag> | ./lem-in -v
     ```
-
+	or  
+	```bash
+	./generator <flag> | ./lem-in | python3 visualizer.py
+    ```
 See `./generator --help` for usage flags.
