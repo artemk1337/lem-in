@@ -85,5 +85,7 @@ t_tmp		*create_struct_(char *line, t_tmp *tmp)
 	}
 	else if (ft_strchr(line, '-'))
 		put_way(line, tmp);
+	else
+		error_exit();
 	return (tmp);
 }
