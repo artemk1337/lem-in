@@ -217,10 +217,11 @@ def main():
     graph = Graph()
     
     load_files(heroes, rooms)
-    room = rooms['garbage']
-    hero = heroes['hero1']
+    room = rooms['death_star']
+    hero = heroes['hero2']
     screen = init_view(graph, room)
     launch_ants(graph, screen, hero, room)
+    os.system("open output.mp4")
 
 
 # Press the green button in the gutter to run the script.
