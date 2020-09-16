@@ -31,7 +31,7 @@ void	dop_1_split_room(t_next *neigh, t_next *neigh_neigh,
 	}
 }
 
-void	dop_2_split_room(t_next *neigh, t_next *neigh_neigh,
+void	dop_2_split_room(t_next *neigh,
 	t_room *in, t_room *out)
 {
 	g_lemin->edge++;
@@ -73,10 +73,11 @@ t_room	*split_room(t_room *curr, t_tmp *list)
 	out->in = in;
 	in->out = out;
 	neigh = out->next;
+	neigh_neigh = NULL;
 	dop_1_split_room(neigh, neigh_neigh, in, out);
 	if (!(neigh = ft_memalloc(sizeof(t_next))))
 		exit(1);
-	dop_2_split_room(neigh, neigh_neigh, in, out);
+	dop_2_split_room(neigh, in, out);
 	neigh = out->next;
 	dop_3_split_room(neigh, in, out);
 	out->prev = in;

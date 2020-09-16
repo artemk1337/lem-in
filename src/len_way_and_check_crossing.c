@@ -52,6 +52,7 @@ int		count_len_way(void)
 	cross_way = 0;
 	curr = g_lemin->finish;
 	prev = curr->prev;
+	neigh = NULL;
 	cross_way = dop_count_len_way1(prev, curr, &len, neigh);
 	len++;
 	if (cross_way)

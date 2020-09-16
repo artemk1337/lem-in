@@ -43,7 +43,7 @@ OBJ_PATH  = obj/
 LIBFT_PATH = libft/
 LIBFT = $(LIBFT_PATH)libft.a
 
-FLAGS = #-Wall \
+FLAGS = -Wall \
 		-Werror \
 		-Wextra \
 		-ftrapv \

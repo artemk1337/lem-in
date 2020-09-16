@@ -74,12 +74,12 @@ void	reset_graph(t_tmp *list)
 	t_tmp	*curr;
 	t_tmp	*next;
 	t_room	*out;
-	t_next	*neigh;
 	t_next	*neigh_neigh;
 
 	curr = list;
 	while (curr && curr->next && !curr->next->room->out)
 		curr = curr->next;
+	next = NULL;
 	curr = dop_2(next, curr);
 	while (curr)
 	{

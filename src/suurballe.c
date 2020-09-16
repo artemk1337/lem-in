@@ -30,10 +30,10 @@ int		suurballe(t_tmp *list)
 {
 	t_room	*curr;
 	t_room	*prev;
-	t_next	*neigh;
 	t_next	*neigh_neigh;
 	int		len_way;
 
+	neigh_neigh = NULL;
 	curr = g_lemin->finish;
 	prev = curr->prev;
 	len_way = count_len_way();
