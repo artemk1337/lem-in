@@ -29,5 +29,5 @@ See `./generator --help` for usage flags.
 2. Suurballe - node-disjoint path finding algorithm http://www.macfreek.nl/memory/Disjoint_Path_Finding
 
 ## Compatibility
-Tested on Mac OS.
+Tested on Mac OS ![MAC OS](https://camo.githubusercontent.com/0d10fab705f2a805a305b477cf48a8f53ae36ca9/68747470733a2f2f6d617863646e2e69636f6e73382e636f6d2f416e64726f69645f4c2f504e472f32342f4f7065726174696e675f53797374656d732f6d61635f6f732d32342e706e67)  
 Programming language: C.
