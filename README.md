@@ -22,6 +22,8 @@
 	```bash
 	./generator <flag> | ./lem-in | python3 visualizer.py
     ```
+	Visualizer example:  
+	![](ezgif.com-video-to-gif.gif)
 See `./generator --help` for usage flags.
 
 ## Algorithms
